@@ -51,7 +51,8 @@ class CombatScene(Scene):
     def __init__(self, players):
         # Init combat phase
         # TODO generate this based on player level, progression, and chaos
-        self.objective_cr = 3 + settings.party_level
+        # self.objective_cr = 3 + settings.party_level
+        self.objective_cr = 3  # TODO set to one for testing
         self.available_enemies: list[type[Enemy]] = [Bandit, Bandit, Bandit]
         self.players = players
         self.enemies = []
