@@ -6,7 +6,7 @@ import pygame
 
 from src.classes.base import Class
 from src.settings import Settings as settings
-from src.engine.coords import Coords as coords
+from src.engine import coords
 
 
 # Spells

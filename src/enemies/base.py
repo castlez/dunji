@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from src.engine.coords import Coords as coords
+from src.engine import coords
 from src.settings import Settings as settings
 
 

@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from src.classes.witch import Witch
-from src.engine.mouse import Mouse as mouse
+from src.engine import mouse
 from src.scenes.combat import CombatScene
 from src.settings import Settings as settings
 

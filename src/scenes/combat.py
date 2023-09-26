@@ -14,8 +14,8 @@ from src.enemies.base import Enemy
 from src.enemies.kobold import Kobold
 from src.settings import Settings as settings
 from src.scenes.base import Scene
-from src.engine.mouse import Mouse as mouse
-from src.engine.keys import Keys as keys
+from src.engine import  mouse
+from src.engine import keys
 
 
 class CombatScene(Scene):
@@ -141,6 +141,8 @@ class CombatScene(Scene):
             self.turn_order[self.current_initiative].take_turn()
 
     def update(self):
+        for player in self.players:
+            player.update()
         match self.phase:
             case 0:  # place
                 self.update_place_phase()

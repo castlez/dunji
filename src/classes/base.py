@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+from src.engine import mouse
 from src.settings import Settings as settings
 
 
@@ -66,6 +67,10 @@ class Class(pygame.sprite.Sprite):
 
     def die(self):
         self.alive = False
+
+    def update(self):
+        if mouse.get_pressed()[0]:
+            m = (mouse.get_pos()[0], mouse.get_pos()[1])
 
     def draw(self, screen):
         if self.alive:
