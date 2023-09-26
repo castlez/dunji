@@ -52,7 +52,8 @@ class Class(pygame.sprite.Sprite):
         screen.blit(self.img, self.status_location)
 
         # TODO you really shouldnt update pos in draw
-        x_off = 11
+        # TODO also these values need tweaking, the click box isnt quite right
+        x_off = 13
         y_off = 41
         self.trect.center = (self.status_location[0], self.status_location[1] + y_off)
         self.srect.center = (self.status_location[0] + x_off, self.status_location[1] + y_off)

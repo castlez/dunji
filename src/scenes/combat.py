@@ -200,7 +200,7 @@ class CombatScene(Scene):
             player.draw_status(screen)
             if player.show_status:
                 screen.blit(self.info_box, self.info_box_pos)
-                settings.render_text(f"p{i} {player.show_status}", (self.info_box_pos[0] + 5, self.info_box_pos[1] + 5))
+                settings.render_text(f"p{i+1} {player.show_status}", (self.info_box_pos[0] + 5, self.info_box_pos[1] + 5))
         match self.phase:
             case 0:  # place
                 self.draw_place_phase(screen)
