@@ -4,6 +4,7 @@ import pygame.image
 
 from src.enemies.base import Enemy
 from src.settings import Settings as settings
+from src.engine.coords import Coords as coords
 
 
 class Bandit(Enemy):
@@ -14,14 +15,11 @@ class Bandit(Enemy):
     def __init__(self, pos):
         super().__init__(pos=pos,
                          name="Bandit",
-                         hp=5,
+                         hp=10,
                          damage=2,
                          speed=60,
-                         description="A bandit. He's not very nice.")
-        self.img_base = pygame.image.load("src/sprites/slime_base.png").convert_alpha()
-        parray = pygame.PixelArray(self.img_base)
-        parray.replace(settings.WHITE, settings.GREY)
-        self.img_over = pygame.image.load("src/sprites/baddies/bandit_over.png")
+                         description="A bandit. He's not very nice.",
+                         sprite_layers=self.sprite_layers)
 
     def take_turn(self):
         """
@@ -36,13 +34,13 @@ class Bandit(Enemy):
                         if player.hp > 0:
                             if not closest:
                                 closest = player
-                            elif settings.distance(self.pos, player.pos) < settings.distance(self.pos, closest.pos):
+                            elif coords.distance(self.rect.center, player.rect.center) < coords.distance(self.rect.center, closest.rect.center):
                                 closest = player
                     self.target = closest
                 else:
                     stopped = False
                     if not self.in_melee(self.target):
-                        stopped = self.move_towards(self.target.pos)
+                        stopped = self.move_towards(self.target.rect.center)
                     if self.in_melee(self.target) or stopped:
                         self.turn_ptr += 1
                         self.traveled = 0
@@ -58,7 +56,7 @@ class Bandit(Enemy):
 
     def move_towards(self, dest):
         # Find direction vector (dx, dy) between enemy and player.
-        dx, dy = dest[0] - self.pos[0], dest[1] - self.pos[1]
+        dx, dy = dest[0] - self.rect.center[0], dest[1] - self.rect.center[1]
         dist = math.hypot(dx, dy)
         stopped = False
         if self.traveled + settings.combat_speed > self.speed:
@@ -66,12 +64,10 @@ class Bandit(Enemy):
                 stopped = True
         dx, dy = dx / dist, dy / dist  # Normalize
         # Move along this normalized vector towards the player
-        self.pos = (self.pos[0] + dx * settings.combat_speed, self.pos[1] + dy * settings.combat_speed)
+        pos = (self.rect.center[0] + dx * settings.combat_speed, self.rect.center[1] + dy * settings.combat_speed)
+        self.move(pos)
         self.traveled += settings.combat_speed
         return stopped
 
     def in_melee(self, target):
-        return settings.distance(self.pos, target.pos) <= 10
-
-    def die(self):
-        self.kill()
+        return coords.distance(self.rect.center, target.rect.center) <= 10

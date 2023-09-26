@@ -47,7 +47,3 @@ class Settings:
         else:
             f = cls.font
         cls.screen.blit(f.render(text, True, color), pos)
-
-    @classmethod
-    def distance(cls, pos1, pos2):
-        return ((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2)**0.5

@@ -58,7 +58,7 @@ class CombatScene(Scene):
         self.enemies = []
         self.turn_order = []
         for player in self.players:
-            player.pos = self.start_pos.pop(0)
+            player.rect.center = self.start_pos.pop(0)
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/combat_ui.png")
@@ -100,8 +100,7 @@ class CombatScene(Scene):
                         if self.start_cbt_pos[1] + self.start_img.get_height() > m[1] > self.start_cbt_pos[1]:
                             if self.current_cr >= self.objective_cr:
                                 # go to the fight phase
-                                # self.turn_order = self.players + self.enemies
-                                self.turn_order = self.enemies
+                                self.turn_order = self.players + self.enemies
                                 self.phase = 1
                             else:
                                 pass  # TODO display error message
@@ -142,6 +141,12 @@ class CombatScene(Scene):
             case 0:  # place
                 self.update_place_phase()
             case 1:  # fight
+                # reap dead baddies
+                new_enemies = []
+                for enemy in self.enemies:
+                    if enemy.alive:
+                       new_enemies.append(enemy)
+                self.enemies = new_enemies
                 self.update_fight_phase()
             case 2:  # outcome
                 pass
