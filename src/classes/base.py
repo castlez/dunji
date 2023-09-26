@@ -29,7 +29,13 @@ class Class(pygame.sprite.Sprite):
         self.rect = self.img_base.get_rect()
         self.rect.center = (0, 0)
 
+        self.status_location = None
+
     # General methods
+
+    def draw_status(self, screen):
+        screen.blit(self.img_base, self.status_location)
+        screen.blit(self.img_over, self.status_location)
 
     def take_damage(self, damage):
         if self.alive:
@@ -48,4 +54,7 @@ class Class(pygame.sprite.Sprite):
 
     def die(self):
         self.alive = False
+
+    def draw(self, screen):
+        raise NotImplementedError()
 

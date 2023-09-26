@@ -8,6 +8,8 @@ class Coords:
         # Find direction vector (dx, dy) between dest and pos.
         dx, dy = dest[0] - pos[0], dest[1] - pos[1]
         dist = math.hypot(dx, dy)
+        if dist == 0:
+            return pos  # if already at location, freeze
         dx, dy = dx / dist, dy / dist  # Normalize
 
         # Move along this normalized vector away from the target

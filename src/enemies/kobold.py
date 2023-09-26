@@ -3,18 +3,18 @@ from src.settings import Settings as settings
 from src.engine.coords import Coords as coords
 
 
-class Bandit(Enemy):
+class Kobold(Enemy):
     # used for enemy placement
-    sprite_img = "baddies/bandit.png"
-    cr = 2
+    sprite_img = "baddies/kobold.png"
+    cr = 1
 
     def __init__(self, pos):
         super().__init__(pos=pos,
-                         name="Bandit",
-                         hp=10,
-                         damage=2,
+                         name="Kobold",
+                         hp=1,
+                         damage=1,
                          speed=60,
-                         description="A bandit. He's not very nice.",
+                         description="A kobold. Little nasty rat",
                          sprite_img=self.sprite_img)
 
     def take_turn(self):

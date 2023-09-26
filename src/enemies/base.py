@@ -1,34 +1,32 @@
+import math
+
 import pygame
 
+from src.engine.coords import Coords as coords
 from src.settings import Settings as settings
 
 
 class Enemy(pygame.sprite.Sprite):
     # used for enemy placement
-    sprite_layers = None  # list of sprite layers
+    sprite_img = None  # list of sprite layers
     cr = 0  # challenge rating
 
-    def __init__(self, pos, name, hp, damage, speed, description, sprite_layers):
+    def __init__(self, pos, name, hp, damage, speed, description, sprite_img):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.hp = hp
         self.damage = damage
         self.speed = speed
         self.description = description
-        self.img = pygame.image.load(f"src/sprites/{sprite_layers[0]}").convert_alpha()
-        self.img_over = None
-        if len(sprite_layers) > 1:
-            self.img_over = pygame.image.load(f"src/sprites/{sprite_layers[1]}")
-
+        self.img = pygame.image.load(f"src/sprites/{sprite_img}").convert_alpha()
         self.rect = self.img.get_rect()
         self.rect.center = pos
         self.rect.center = pos
 
-        if self.img_over:
-            parray = pygame.PixelArray(self.img)
-            # TODO do better coloring of enemies
-            parray.replace(settings.WHITE, settings.GREY)
-            self.img_over = pygame.image.load("src/sprites/baddies/bandit_over.png")
+        # edit color of enemy for spice
+        parray = pygame.PixelArray(self.img)
+        # TODO do better coloring of enemies
+        parray.replace(settings.WHITE, settings.GREY)
 
         self.turn_ptr = 0
         self.turn = ["move", "action", "done"]
@@ -53,10 +51,27 @@ class Enemy(pygame.sprite.Sprite):
         if not self.img:
             raise Exception("fuck 1")
         screen.blit(self.img, self.rect.center)
-        if self.img_over:
-            screen.blit(self.img_over, self.rect.center)
 
     def move(self, pos):
         # TODO do i need both of these?
         self.rect.center = pos
         self.rect.center = pos
+
+    def move_towards(self, dest):
+        # Find direction vector (dx, dy) between enemy and player.
+        dx, dy = dest[0] - self.rect.center[0], dest[1] - self.rect.center[1]
+        dist = math.hypot(dx, dy)
+        stopped = False
+        if self.traveled + settings.combat_speed > self.speed:
+            if dist - self.speed > 0:
+                stopped = True
+        dx, dy = dx / dist, dy / dist  # Normalize
+        # Move along this normalized vector towards the player
+        pos = (self.rect.center[0] + dx * settings.combat_speed, self.rect.center[1] + dy * settings.combat_speed)
+        self.move(pos)
+        self.traveled += settings.combat_speed
+        return stopped
+
+    def in_melee(self, target):
+        return coords.distance(self.rect.center, target.rect.center) <= 10
+

@@ -8,8 +8,10 @@ Combat happens in Three phases:
 """
 import pygame
 
+from src.classes.base import Class
 from src.enemies.bandit import Bandit
 from src.enemies.base import Enemy
+from src.enemies.kobold import Kobold
 from src.settings import Settings as settings
 from src.scenes.base import Scene
 from src.engine.mouse import Mouse as mouse
@@ -25,6 +27,10 @@ class CombatScene(Scene):
     # screen locations
     player_screen_start = (12, 230)
     status_screen_start = (200, 230)
+    status_y = 225
+    p1_display_pos = (22, status_y)
+    p2_display_pos = (82, status_y)
+    p3_display_pos = (142, status_y)
 
     # Player starting positions
     start_pos = [(50, 50), (78, 82), (50, 114)]
@@ -52,9 +58,9 @@ class CombatScene(Scene):
         # Init combat phase
         # TODO generate this based on player level, progression, and chaos
         # self.objective_cr = 3 + settings.party_level
-        self.objective_cr = 3  # TODO set to one for testing
-        self.available_enemies: list[type[Enemy]] = [Bandit, Bandit, Bandit]
-        self.players = players
+        self.objective_cr = 5  # TODO set for testing
+        self.available_enemies: list[type[Enemy]] = [Bandit, Kobold, Bandit]
+        self.players: list[Class] = players
         self.enemies = []
         self.turn_order = []
         for player in self.players:
@@ -63,6 +69,9 @@ class CombatScene(Scene):
         # general ui
         self.img = pygame.image.load("src/sprites/ui/combat_ui.png")
         self.img = pygame.transform.scale(self.img, (settings.WIDTH, settings.HEIGHT))
+        self.players[0].status_location = self.p1_display_pos
+        self.players[1].status_location = self.p2_display_pos
+        self.players[2].status_location = self.p3_display_pos
 
         # placement ui
         self.objective_box = pygame.image.load("src/sprites/ui/cbt_objective_box.png")
@@ -72,10 +81,7 @@ class CombatScene(Scene):
         # place the enemy options for this encounter
         self.display_enemy_options = []
         for i, enemy in enumerate(self.available_enemies):
-            l1 = pygame.image.load(f"src/sprites/{enemy.sprite_layers[0]}")
-            l2 = pygame.image.load(f"src/sprites/{enemy.sprite_layers[1]}")
-            self.display_enemy_options.append((l1,
-                                               l2,
+            self.display_enemy_options.append((pygame.image.load(f"src/sprites/{enemy.sprite_img}"),
                                                (self.enemy_list_start[0] + i * self.enemy_list_step, self.enemy_list_start[1]),
                                                i))
 
@@ -89,11 +95,9 @@ class CombatScene(Scene):
                 m = (mouse.get_pos()[0], mouse.get_pos()[1])
                 # check if we grabbed an enemy from self.display_enemy_options
                 for i, enemy in enumerate(self.display_enemy_options):
-                    if enemy[2][0] < m[0] < enemy[2][0] + enemy[0].get_width():
-                        if enemy[2][1] + enemy[0].get_height() > m[1] > enemy[2][1]:
-                            l1 = pygame.image.load(f"src/sprites/{self.available_enemies[i].sprite_layers[0]}")
-                            l2 = pygame.image.load(f"src/sprites/{self.available_enemies[i].sprite_layers[1]}")
-                            self.holding = (l1, l2, m, i)
+                    if enemy[1][0] < m[0] < enemy[1][0] + enemy[0].get_width():
+                        if enemy[1][1] + enemy[0].get_height() > m[1] > enemy[1][1]:
+                            self.holding = (enemy[0], m, i)
                 else:
                     # checking if start button was pressed
                     if self.start_cbt_pos[0] < m[0] < self.start_cbt_pos[0] + self.start_img.get_width():
@@ -118,10 +122,10 @@ class CombatScene(Scene):
                 self.try_place_enemy()
                 self.holding = None
             else:  # move enemy in hand
-                self.holding = (self.holding[0], self.holding[1],
+                self.holding = (self.holding[0],
                                 (mouse.get_pos()[0] - self.holding[0].get_width() // 2,
                                  mouse.get_pos()[1] - self.holding[0].get_height() // 2),
-                                self.holding[3])
+                                self.holding[2])
 
     def update_fight_phase(self):
         """
@@ -179,16 +183,16 @@ class CombatScene(Scene):
 
         # enemy placement options
         for opt in self.display_enemy_options:
-            screen.blit(opt[0], opt[2])
-            screen.blit(opt[1], opt[2])
+            screen.blit(opt[0], opt[1])
 
         # currently held enemy
         if self.holding:
-            screen.blit(self.holding[0], self.holding[2])
-            screen.blit(self.holding[1], self.holding[2])
+            screen.blit(self.holding[0], self.holding[1])
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
+        for player in self.players:
+            player.draw_status(screen)
         match self.phase:
             case 0:  # place
                 self.draw_place_phase(screen)
@@ -222,7 +226,7 @@ class CombatScene(Scene):
                 # add the enemy at the given position
                 # ignore the constructor error, types are jank in python
                 new_pos = (m[0] - self.holding[0].get_width() // 2, m[1] - self.holding[0].get_height() // 2)
-                self.enemies.append(self.available_enemies[self.holding[3]](pos=new_pos))
+                self.enemies.append(self.available_enemies[self.holding[2]](pos=new_pos))
                 self.holding = None
 
     # fight phase
