@@ -11,6 +11,7 @@ class Settings:
     WIDTH = 400
     HEIGHT = 300
     SCALEFACTOR = int(1000 / WIDTH)
+    CELL_SIZE = 32
 
     # text
     font = None

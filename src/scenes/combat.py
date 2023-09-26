@@ -151,6 +151,7 @@ class CombatScene(Scene):
                     if enemy.alive:
                        new_enemies.append(enemy)
                 self.enemies = new_enemies
+                # TODO turn order isnt updated so it hangs with dead enemies in the list
                 self.update_fight_phase()
             case 2:  # outcome
                 pass

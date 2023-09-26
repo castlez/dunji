@@ -126,7 +126,7 @@ class Witch(Class):
         super().__init__(name="witch",
                          hit_die=4,
                          speed=30,
-                         sprite_layers=["slime_base.png", "pc/witch_over.png"],
+                         sprite_img="pc/witch.png",
                          color=color)
 
         # spell stuff
@@ -138,17 +138,11 @@ class Witch(Class):
         self.current_spell = None
         self.spell_range_tol = settings.combat_speed  # close enough to max range to cast
 
-        # TODO roll traits
-        self.traits = ["todo"]
-
     def draw(self, screen):
+        super().draw(screen)
         if self.alive:
-            screen.blit(self.img_base, self.rect.center)
-            screen.blit(self.img_over, self.rect.center)
             for s in self.spells_in_flight:
                 s.draw(screen)
-        else:
-            screen.blit(self.dead_img, self.rect.center)
 
     def level_up(self):
         super().level_up()
@@ -214,6 +208,7 @@ class Witch(Class):
                             self.turn_ptr += 1
                             self.traveled = 0
                             self.current_spell = None
+                            self.target = None
                 case "action":
                     for s in self.spells_in_flight:
                         if s.update():
