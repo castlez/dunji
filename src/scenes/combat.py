@@ -31,6 +31,7 @@ class CombatScene(Scene):
     p1_display_pos = (22, status_y)
     p2_display_pos = (82, status_y)
     p3_display_pos = (142, status_y)
+    info_box_pos = (0, 0)
 
     # Player starting positions
     start_pos = [(50, 50), (78, 82), (50, 114)]
@@ -72,6 +73,7 @@ class CombatScene(Scene):
         self.players[0].status_location = self.p1_display_pos
         self.players[1].status_location = self.p2_display_pos
         self.players[2].status_location = self.p3_display_pos
+        self.info_box = pygame.image.load("src/sprites/ui/info_box.png")
 
         # placement ui
         self.objective_box = pygame.image.load("src/sprites/ui/cbt_objective_box.png")
@@ -194,8 +196,11 @@ class CombatScene(Scene):
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
-        for player in self.players:
+        for i, player in enumerate(self.players):
             player.draw_status(screen)
+            if player.show_status:
+                screen.blit(self.info_box, self.info_box_pos)
+                settings.render_text(f"p{i} {player.show_status}", (self.info_box_pos[0] + 5, self.info_box_pos[1] + 5))
         match self.phase:
             case 0:  # place
                 self.draw_place_phase(screen)

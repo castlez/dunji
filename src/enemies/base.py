@@ -21,7 +21,6 @@ class Enemy(pygame.sprite.Sprite):
         self.img = pygame.image.load(f"src/sprites/{sprite_img}").convert_alpha()
         self.rect = self.img.get_rect()
         self.rect.center = pos
-        self.rect.center = pos
 
         # edit color of enemy for spice
         parray = pygame.PixelArray(self.img)
@@ -54,7 +53,6 @@ class Enemy(pygame.sprite.Sprite):
 
     def move(self, pos):
         # TODO do i need both of these?
-        self.rect.center = pos
         self.rect.center = pos
 
     def move_towards(self, dest):

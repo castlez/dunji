@@ -25,9 +25,13 @@ class Class(pygame.sprite.Sprite):
         # static sprits
         self.dead_img = pygame.image.load("src/sprites/grave.png")
         self.trait_img = pygame.image.load("src/sprites/pc/trait_icon.png")
+        self.trect = self.trait_img.get_rect()
         self.status_img = pygame.image.load("src/sprites/pc/status_icon.png")
+        self.srect = self.status_img.get_rect()
         self.ability_img = pygame.image.load("src/sprites/pc/ability_icon.png")
+        self.arect = self.ability_img.get_rect()
         self.inven_img = pygame.image.load("src/sprites/pc/inven_icon.png")
+        self.irect = self.inven_img.get_rect()
 
         self.img = pygame.image.load(f"src/sprites/{sprite_img}").convert_alpha()
         parray = pygame.PixelArray(self.img)
@@ -38,17 +42,29 @@ class Class(pygame.sprite.Sprite):
         self.status_location = None
         self.traits = ["todo traits"]
         self.statuses = ["todo statuses"]
+        self.abilities = ["todo abilities"]
+        self.inven = ["todo inven"]
+        self.show_status = None
 
     # General methods
 
     def draw_status(self, screen):
         screen.blit(self.img, self.status_location)
+
+        # TODO you really shouldnt update pos in draw
+        x_off = 11
+        y_off = 41
+        self.trect.center = (self.status_location[0], self.status_location[1] + y_off)
+        self.srect.center = (self.status_location[0] + x_off, self.status_location[1] + y_off)
+        self.arect.center = (self.status_location[0] + x_off*2, self.status_location[1] + y_off)
+        self.irect.center = (self.status_location[0] + x_off - 4, self.status_location[1] + y_off + 15)
+
         settings.render_text(f"HP: {self.hp}",
                              (self.status_location[0], self.status_location[1] + settings.CELL_SIZE))
-        screen.blit(self.trait_img, (self.status_location[0] - 12, self.status_location[1] + 30))
-        screen.blit(self.status_img, (self.status_location[0], self.status_location[1] + 30))
-        screen.blit(self.ability_img, (self.status_location[0] + 12, self.status_location[1] + 30))
-        screen.blit(self.inven_img, (self.status_location[0], self.status_location[1] + 40))
+        screen.blit(self.trait_img, self.trect.center)
+        screen.blit(self.status_img, self.srect.center)
+        screen.blit(self.ability_img, self.arect.center)
+        screen.blit(self.inven_img, self.irect.center)
 
     def take_damage(self, damage):
         if self.alive:
@@ -69,8 +85,20 @@ class Class(pygame.sprite.Sprite):
         self.alive = False
 
     def update(self):
+        # TODO these arent scaling with screen size correctly and
+        # TODO are really close together?
         if mouse.get_pressed()[0]:
             m = (mouse.get_pos()[0], mouse.get_pos()[1])
+            if self.trect.collidepoint(m):
+                self.show_status = "traits"
+            elif self.srect.collidepoint(m):
+                self.show_status = "statuses"
+            elif self.arect.collidepoint(m):
+                self.show_status = "abilities"
+            elif self.irect.collidepoint(m):
+                self.show_status = "inven"
+            else:
+                self.show_status = None
 
     def draw(self, screen):
         if self.alive:
