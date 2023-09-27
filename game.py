@@ -5,6 +5,7 @@ import pygame
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.scenes.combat import CombatScene
+from src.scenes.map import MapScene
 from src.settings import Settings as settings
 
 pygame.init()
@@ -17,7 +18,8 @@ def main():
     settings.initialize()
 
     # Init first scene (TODO update this to actually flow like a game)
-    settings.current_scene = CombatScene(players=[Witch(color=settings.RED), Witch(color=settings.BLUE), Witch(color=settings.GREEN)])
+    settings.players = [Witch(color=settings.RED), Witch(color=settings.BLUE), Witch(color=settings.GREEN)]
+    settings.current_scene = MapScene()
 
     # Main Loop
     while True:

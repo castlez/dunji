@@ -25,9 +25,13 @@ class Settings:
     GREY = (100, 100, 100)
 
     # state
+    players = []
     chaos = 0
     party_level = 1
     current_scene = None
+    map = []  # multi-dimensional array of scenes
+    current_floor = 0
+    base_cr = 3
 
     # universal values
     combat_speed = 10

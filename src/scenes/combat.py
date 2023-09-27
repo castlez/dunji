@@ -8,7 +8,6 @@ Combat happens in Three phases:
 """
 import pygame
 
-from src.classes.base import Class
 from src.enemies.bandit import Bandit
 from src.enemies.base import Enemy
 from src.enemies.kobold import Kobold
@@ -31,7 +30,7 @@ class CombatScene(Scene):
     p1_display_pos = (22, status_y)
     p2_display_pos = (82, status_y)
     p3_display_pos = (142, status_y)
-    info_box_pos = (0, 0)
+    info_box_pos = (20, 20)
 
     # Player starting positions
     start_pos = [(50, 50), (78, 82), (50, 114)]
@@ -49,31 +48,29 @@ class CombatScene(Scene):
     start_cbt_pos = (11, 190)
 
     # current turn pointer
-    current_initiative = -1  # [self.players, self.enemies]
+    current_initiative = -1  # [settings.players, self.enemies]
 
     # this captures if someone is currently taking a turn
     # set back to false by the player/enemy when they finish their turn
     is_turn = False
 
-    def __init__(self, players):
+    def __init__(self):
         # Init combat phase
         # TODO generate this based on player level, progression, and chaos
         # self.objective_cr = 3 + settings.party_level
         self.objective_cr = 5  # TODO set for testing
         self.available_enemies: list[type[Enemy]] = [Bandit, Kobold, Bandit]
-        self.players: list[Class] = players
         self.enemies = []
         self.turn_order = []
-        for player in self.players:
+        for player in settings.players:
             player.rect.center = self.start_pos.pop(0)
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/combat_ui.png")
         self.img = pygame.transform.scale(self.img, (settings.WIDTH, settings.HEIGHT))
-        self.players[0].status_location = self.p1_display_pos
-        self.players[1].status_location = self.p2_display_pos
-        self.players[2].status_location = self.p3_display_pos
-        self.info_box = pygame.image.load("src/sprites/ui/info_box.png")
+        settings.players[0].status_location = self.p1_display_pos
+        settings.players[1].status_location = self.p2_display_pos
+        settings.players[2].status_location = self.p3_display_pos
 
         # placement ui
         self.objective_box = pygame.image.load("src/sprites/ui/cbt_objective_box.png")
@@ -86,6 +83,19 @@ class CombatScene(Scene):
             self.display_enemy_options.append((pygame.image.load(f"src/sprites/{enemy.sprite_img}"),
                                                (self.enemy_list_start[0] + i * self.enemy_list_step, self.enemy_list_start[1]),
                                                i))
+
+    @staticmethod
+    def get_map_icon():
+        return pygame.image.load("src/sprites/nav/combat_encounter_icon.png")
+
+    @staticmethod
+    def get_description():
+        if settings.chaos == 0:
+            ecr = "3"
+        else:
+            ecr = f"{settings.base_cr - settings.chaos} - {settings.base_cr + settings.chaos}"
+        return ["A combat encounter",
+                f"Expected CR: {ecr}"]
 
     def update_place_phase(self):
         """
@@ -106,7 +116,7 @@ class CombatScene(Scene):
                         if self.start_cbt_pos[1] + self.start_img.get_height() > m[1] > self.start_cbt_pos[1]:
                             if self.current_cr >= self.objective_cr:
                                 # go to the fight phase
-                                self.turn_order = self.players + self.enemies
+                                self.turn_order = settings.players + self.enemies
                                 self.phase = 1
                             else:
                                 pass  # TODO display error message
@@ -143,7 +153,7 @@ class CombatScene(Scene):
             self.turn_order[self.current_initiative].take_turn()
 
     def update(self):
-        for player in self.players:
+        for player in settings.players:
             player.update()
         match self.phase:
             case 0:  # place
@@ -181,7 +191,7 @@ class CombatScene(Scene):
         screen.blit(self.start_img, self.start_cbt_pos)
 
         # current combatants
-        for player in self.players:
+        for player in settings.players:
             player.draw(screen)
         for enemy in self.enemies:
             enemy.draw(screen)
@@ -196,17 +206,12 @@ class CombatScene(Scene):
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
-        for i, player in enumerate(self.players):
-            player.draw_status(screen)
-            if player.show_status:
-                screen.blit(self.info_box, self.info_box_pos)
-                settings.render_text(f"p{i+1} {player.show_status}", (self.info_box_pos[0] + 5, self.info_box_pos[1] + 5))
         match self.phase:
             case 0:  # place
                 self.draw_place_phase(screen)
             case 1:  # fight
                 # current combatants
-                for player in self.players:
+                for player in settings.players:
                     player.draw(screen)
                 for enemy in self.enemies:
                     enemy.draw(screen)
@@ -214,6 +219,7 @@ class CombatScene(Scene):
                 pass
             case _:
                 raise NotImplementedError()
+        super().draw(screen)
 
     # place phase
     def get_enemy_options(self):
@@ -242,4 +248,4 @@ class CombatScene(Scene):
         return self.enemies
 
     def get_current_players(self):
-        return self.players
+        return settings.players

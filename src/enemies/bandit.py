@@ -26,7 +26,7 @@ class Bandit(Enemy):
             case "move":
                 if not self.target:
                     closest = None
-                    for player in settings.current_scene.players:
+                    for player in settings.players:
                         if player.hp > 0:
                             if not closest:
                                 closest = player

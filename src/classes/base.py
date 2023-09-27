@@ -3,6 +3,8 @@ import random
 import pygame
 
 from src.engine import mouse
+from src.scenes.combat import CombatScene
+from src.scenes.map import MapScene
 from src.settings import Settings as settings
 
 
@@ -102,8 +104,9 @@ class Class(pygame.sprite.Sprite):
                 self.show_status = None
 
     def draw(self, screen):
-        if self.alive:
-            screen.blit(self.img, self.rect.center)
-        else:
-            screen.blit(self.dead_img, self.rect.center)
+        if type(settings.current_scene) != MapScene:
+            if self.alive:
+                screen.blit(self.img, self.rect.center)
+            else:
+                screen.blit(self.dead_img, self.rect.center)
 
