@@ -13,10 +13,10 @@ class Scene:
     def get_map_icon():
         raise NotImplementedError()
 
-    def update(self):
+    def get_info_box_data(self):
         raise NotImplementedError()
 
-    def get_info_box_data(self):
+    def update(self):
         raise NotImplementedError()
 
     def draw(self, screen):
