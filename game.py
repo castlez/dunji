@@ -31,8 +31,6 @@ def main():
               starting_inven=[Coins()])
     ]
     settings.current_scene = TitleScene()
-    # settings.current_scene = ShopScene()
-    # settings.current_scene = CombatScene()
 
     # Main Loop
     while True:

@@ -52,8 +52,8 @@ class ShopScene(Scene):
         self.start_pos = (11, 190)
         self.ind = pygame.image.load("src/sprites/shops/ind.png")
 
-        # get shops
-        item_pool = [Candy, Cure, Gem, HPPot, Shuriken]
+        # get shops (gems cant show up as wares)
+        item_pool = [Candy, Cure, HPPot, Shuriken]
         self.shops = []
         for loc in self.shop_loc:
             num_items = random.randint(2, 5)
