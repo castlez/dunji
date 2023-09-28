@@ -36,10 +36,8 @@ class MapOption(pygame.sprite.Sprite):
 
 
 class MapScene(Scene):
-    players = None
-
     # screen locations
-    info_box_pos = (20, 20)
+    info_box_pos = (159, 80)
     status_x = 100
     start = 40
     step = 80

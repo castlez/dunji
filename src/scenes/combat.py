@@ -66,7 +66,7 @@ class CombatScene(Scene):
             player.rect.center = self.start_pos.pop(0)
 
         # general ui
-        self.img = pygame.image.load("src/sprites/ui/combat_ui.png")
+        self.img = pygame.image.load("src/sprites/ui/gen_ui.png")
         self.img = pygame.transform.scale(self.img, (settings.WIDTH, settings.HEIGHT))
         settings.players[0].status_location = self.p1_display_pos
         settings.players[1].status_location = self.p2_display_pos

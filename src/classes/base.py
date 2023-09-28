@@ -5,11 +5,12 @@ import pygame
 from src.engine import mouse
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
+from src.scenes.shops import ShopScene
 from src.settings import Settings as settings
 
 
 class Class(pygame.sprite.Sprite):
-    def __init__(self, name, hit_die, speed, sprite_img, color):
+    def __init__(self, name, hit_die, speed, sprite_img, color, starting_inven):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.hit_die = hit_die
@@ -21,7 +22,8 @@ class Class(pygame.sprite.Sprite):
 
         # all classes
         self.level = 1
-        self.hp = 10 + hit_die
+        self.max_hp = 10 + hit_die
+        self.hp = self.max_hp
         self.alive = True
 
         # static sprits
@@ -41,12 +43,18 @@ class Class(pygame.sprite.Sprite):
         self.rect = self.img.get_rect()
         self.rect.center = (0, 0)
 
+        # player state
         self.status_location = None
         self.traits = ["todo traits"]
         self.statuses = ["todo statuses"]
         self.abilities = ["todo abilities"]
-        self.inven = ["todo inven"]
+        self.inven = starting_inven
         self.show_status = None
+
+        # number of actions per turn
+        # candy increases this by 1
+        # reset by player if above 1 after turn
+        self.actions = 1
 
     # General methods
 
@@ -101,7 +109,12 @@ class Class(pygame.sprite.Sprite):
             elif self.irect.collidepoint(m):
                 self.show_status = "inven"
             else:
+                # TODO if inven is open and you click a shop it closes :(
                 self.show_status = None
+
+        # if we are in shop scene, shop freely
+        if type(settings.current_scene) == ShopScene:
+            pass  # TODO go shopping
 
     def draw(self, screen):
         if type(settings.current_scene) != MapScene:

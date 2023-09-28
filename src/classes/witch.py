@@ -122,12 +122,13 @@ class Spellbook:
 
 class Witch(Class):
 
-    def __init__(self, color):
+    def __init__(self, color, starting_inven):
         super().__init__(name="witch",
                          hit_die=4,
                          speed=30,
                          sprite_img="pc/witch.png",
-                         color=color)
+                         color=color,
+                         starting_inven=starting_inven)
 
         # spell stuff
         self.cantrip = FireBolt

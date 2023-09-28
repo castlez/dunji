@@ -4,8 +4,11 @@ import pygame
 
 from src.classes.witch import Witch
 from src.engine import mouse
+from src.items.coins import Coins
+from src.items.hp_pot import HPPot
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
+from src.scenes.shops import ShopScene
 from src.scenes.title import TitleScene
 from src.settings import Settings as settings
 
@@ -19,8 +22,17 @@ def main():
     settings.initialize()
 
     # Init first scene (TODO update this to actually flow like a game)
-    settings.players = [Witch(color=settings.RED), Witch(color=settings.BLUE), Witch(color=settings.GREEN)]
-    settings.current_scene = TitleScene()
+    settings.players = [
+        Witch(color=settings.RED,
+              starting_inven=[Coins()]),
+        Witch(color=settings.BLUE,
+              starting_inven=[Coins(), HPPot()]),
+        Witch(color=settings.GREEN,
+              starting_inven=[Coins()])
+    ]
+    # settings.current_scene = TitleScene()
+    settings.current_scene = ShopScene()
+    # settings.current_scene = CombatScene()
 
     # Main Loop
     while True:
@@ -31,7 +43,6 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            # DEBUG
 
             # detect shift + left click
             # for displaying mouse coordinates (scaled by settings.SCALEFACTOR)
