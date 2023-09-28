@@ -3,18 +3,19 @@ import random
 import pygame
 
 from src.scenes.base import Scene
-from src.scenes.combat import CombatScene
 from src.settings import Settings as settings
 from src.engine import mouse
 
-# scene types
+# scenes
 from src.scenes.combat import CombatScene
+from src.scenes.shops import ShopScene
 
 
 class MapOption(pygame.sprite.Sprite):
     def __init__(self, scene, floor):
         pygame.sprite.Sprite.__init__(self)
         self.img = scene.get_map_icon()
+        self.img_d = scene.get_map_icon()
         self.rect = self.img.get_rect()
         self.desc_lines = scene.get_description()
         self.floor = floor
@@ -28,11 +29,12 @@ class MapOption(pygame.sprite.Sprite):
 
     def draw(self, screen):
         if self.floor != settings.current_floor:
-            dark = pygame.Surface((self.img.get_width(), self.img.get_height()), flags=pygame.SRCALPHA)
+            dark = pygame.Surface((self.img_d.get_width(), self.img_d.get_height()), flags=pygame.SRCALPHA)
             dark.fill((50, 50, 50, 0))
-            self.img.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
-
-        screen.blit(self.img, self.rect.center)
+            self.img_d.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+            screen.blit(self.img_d, self.rect.center)
+        else:
+            screen.blit(self.img, self.rect.center)
 
 
 class MapScene(Scene):
@@ -141,7 +143,7 @@ class MapScene(Scene):
         Drawn in reverse so you travel up
         :return:
         """
-        scene_types = [CombatScene]
+        scene_types = [CombatScene, ShopScene]
 
         # the first three floors can have anything
         for i in range(3):
@@ -151,7 +153,7 @@ class MapScene(Scene):
         # the fourth floor is always a choice between a town and combat
         # TODO add town scene
         # settings.map.append([random.choice([CombatScene, TownScene])])
-        settings.map.append([MapOption(CombatScene, 3), MapOption(CombatScene, 3)])
+        settings.map.append([MapOption(CombatScene, 3), MapOption(ShopScene, 3)])
 
         # boss encounter
         # TODO add boss scene

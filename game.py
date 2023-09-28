@@ -30,13 +30,18 @@ def main():
         Witch(color=settings.GREEN,
               starting_inven=[Coins()])
     ]
-    # settings.current_scene = TitleScene()
-    settings.current_scene = ShopScene()
+    settings.current_scene = TitleScene()
+    # settings.current_scene = ShopScene()
     # settings.current_scene = CombatScene()
 
     # Main Loop
     while True:
         clock.tick(settings.FRAMERATE)
+
+        # back to map
+        if settings.current_scene.done:
+            settings.current_scene = MapScene()
+            settings.current_floor += 1
 
         # check for exit
         for event in pygame.event.get():

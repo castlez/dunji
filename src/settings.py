@@ -29,6 +29,7 @@ class Settings:
     chaos = 0
     party_level = 1
     current_scene = None
+    current_scene_name = None
     map = []  # multi-dimensional array of scenes
     current_floor = 0
     base_cr = 3

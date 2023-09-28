@@ -9,6 +9,8 @@ class Scene:
 
     info_box_pos = None
 
+    done = False
+
     @staticmethod
     def get_map_icon():
         raise NotImplementedError()

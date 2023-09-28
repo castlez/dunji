@@ -62,8 +62,9 @@ class CombatScene(Scene):
         self.available_enemies: list[type[Enemy]] = [Bandit, Kobold, Bandit]
         self.enemies = []
         self.turn_order = []
+        sp = self.start_pos.copy()
         for player in settings.players:
-            player.rect.center = self.start_pos.pop(0)
+            player.rect.center = sp.pop(0)
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/gen_ui.png")
@@ -143,6 +144,8 @@ class CombatScene(Scene):
         """
         in the fight phase, the DM watches the fight happen
         """
+        if not self.enemies:
+            self.phase += 1
         if not self.is_turn:
             self.current_initiative += 1
             if self.current_initiative >= len(self.turn_order):
@@ -168,7 +171,8 @@ class CombatScene(Scene):
                 # TODO turn order isnt updated so it hangs with dead enemies in the list
                 self.update_fight_phase()
             case 2:  # outcome
-                pass
+                # TODO outcome screen
+                self.done = True
             case _:
                 raise NotImplementedError()
 
