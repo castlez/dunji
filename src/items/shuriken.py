@@ -8,7 +8,7 @@ class Shuriken(Item):
 
     def __init__(self):
         super().__init__(name="Shuriken",
-                         description="Deal 5 damage at range",
+                         description="Deal 5 range dmg",
                          img=pygame.image.load("src/sprites/items/shuriken.png"),
                          value=10)
         self.target = None

@@ -30,9 +30,9 @@ class ShopScene(Scene):
 
     log_box_pos = (200, 230)
 
-    shop_loc = [(276, 32),
-                (351, 107),
-                (267, 173)]
+    shop_loc = [(256, 12),
+                (331, 87),
+                (247, 153)]
 
     # Player starting positions
     start_pos = [(50, 50), (78, 82), (50, 114)]
@@ -125,8 +125,8 @@ class ShopScene(Scene):
                                          (item_start[0] + 20 + item_step*i, item_start[1]))
                     if self.hover == item:
                         hover_pos = (self.log_box_pos[0] - 3, self.log_box_pos[1] - 15)
-                        settings.render_text(f"{item.name}",
+                        settings.render_text(f"{item.name} - {item.description}",
                                              hover_pos)
-                screen.blit(self.ind, (self.shop_loc[k][0]-60, self.shop_loc[k][1]-25))
+                screen.blit(self.ind, (self.shop_loc[k][0]-40, self.shop_loc[k][1]))
 
         super().draw(screen)

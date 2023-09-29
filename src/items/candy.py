@@ -7,7 +7,7 @@ class Candy(Item):
 
     def __init__(self):
         super().__init__(name="Candy",
-                         description="Grants an additional action",
+                         description="Grants 1 action",
                          img=pygame.image.load("src/sprites/items/candy.png"),
                          value=10)
 
