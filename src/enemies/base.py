@@ -20,7 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         self.description = description
         self.img = pygame.image.load(f"src/sprites/{sprite_img}").convert_alpha()
         self.rect = self.img.get_rect()
-        self.rect.center = pos
+        self.rect.topleft = pos
 
         # edit color of enemy for spice
         parray = pygame.PixelArray(self.img)
@@ -49,15 +49,15 @@ class Enemy(pygame.sprite.Sprite):
     def draw(self, screen):
         if not self.img:
             raise Exception("fuck 1")
-        screen.blit(self.img, self.rect.center)
+        screen.blit(self.img, self.rect.topleft)
 
     def move(self, pos):
         # TODO do i need both of these?
-        self.rect.center = pos
+        self.rect.topleft = pos
 
     def move_towards(self, dest):
         # Find direction vector (dx, dy) between enemy and player.
-        dx, dy = dest[0] - self.rect.center[0], dest[1] - self.rect.center[1]
+        dx, dy = dest[0] - self.rect.topleft[0], dest[1] - self.rect.topleft[1]
         dist = math.hypot(dx, dy)
         stopped = False
         if self.traveled + settings.combat_speed > self.speed:
@@ -65,11 +65,11 @@ class Enemy(pygame.sprite.Sprite):
                 stopped = True
         dx, dy = dx / dist, dy / dist  # Normalize
         # Move along this normalized vector towards the player
-        pos = (self.rect.center[0] + dx * settings.combat_speed, self.rect.center[1] + dy * settings.combat_speed)
+        pos = (self.rect.topleft[0] + dx * settings.combat_speed, self.rect.topleft[1] + dy * settings.combat_speed)
         self.move(pos)
         self.traveled += settings.combat_speed
         return stopped
 
     def in_melee(self, target):
-        return coords.distance(self.rect.center, target.rect.center) <= 10
+        return coords.distance(self.rect.topleft, target.rect.topleft) <= 10
 

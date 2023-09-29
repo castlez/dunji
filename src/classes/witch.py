@@ -26,9 +26,9 @@ class Spell(pygame.sprite.Sprite):
         self.spell_target = spell_target
         self.img = img
         self.rect = self.img.get_rect()
-        self.rect.center = pos
-        dest = self.spell_target.rect.center
-        rotation = -1 * math.degrees(math.atan2(dest[1] - self.rect.center[1], dest[0] - self.rect.center[0]))
+        self.rect.topleft = pos
+        dest = self.spell_target.rect.topleft
+        rotation = -1 * math.degrees(math.atan2(dest[1] - self.rect.topleft[1], dest[0] - self.rect.topleft[0]))
         self.img = pygame.transform.rotate(self.img, rotation)
 
         self.alive = True
@@ -46,14 +46,14 @@ class Spell(pygame.sprite.Sprite):
         if it hits, call on_hit and return True
         """
         # check spell collision
-        self.rect.center = self.rect.center
+        self.rect.topleft = self.rect.topleft
         if self.rect.colliderect(self.spell_target.rect):
             self.die()
             self.on_hit(self.spell_target)
             return True
         else:
-            self.rect.center = coords.get_next_pos_towards(self.rect.center, self.spell_target.rect.center, settings.combat_speed)
-            if coords.distance(self.start_pos, self.rect.center) > self.range:
+            self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft, self.spell_target.rect.topleft, settings.combat_speed)
+            if coords.distance(self.start_pos, self.rect.topleft) > self.range:
                 # failsafe, but shouldn't happen since pc only fires if in range
                 self.die()
                 return True
@@ -61,7 +61,7 @@ class Spell(pygame.sprite.Sprite):
 
     def draw(self, screen):
         if self.alive:
-            screen.blit(self.img, self.rect.center)
+            screen.blit(self.img, self.rect.topleft)
 
 # Cantrips (cant be upcasted)
 
@@ -174,8 +174,8 @@ class Witch(Class):
                             closest = settings.current_scene.enemies[0]
                             for enemy in settings.current_scene.enemies:
                                 if enemy.alive:
-                                    dist_to_enemy = coords.distance(self.rect.center, enemy.rect.center)
-                                    dist_to_closest = coords.distance(self.rect.center, closest.rect.center)
+                                    dist_to_enemy = coords.distance(self.rect.topleft, enemy.rect.topleft)
+                                    dist_to_closest = coords.distance(self.rect.topleft, closest.rect.topleft)
                                     if not closest:
                                         closest = enemy
                                     elif dist_to_enemy < dist_to_closest:
@@ -184,7 +184,7 @@ class Witch(Class):
                     if self.target:
                         next = self.get_next_position(self.target)  # next position to away from target
                         min_cast_range = self.current_spell.range - self.spell_range_tol
-                        dist_to_target = coords.distance(self.rect.center, self.target.rect.center)
+                        dist_to_target = coords.distance(self.rect.topleft, self.target.rect.topleft)
                         if min_cast_range < dist_to_target < self.current_spell.range or \
                                 (self.traveled + settings.combat_speed > self.speed and
                                  dist_to_target < self.current_spell.range):
@@ -194,16 +194,16 @@ class Witch(Class):
                             self.traveled = 0
 
                             # cast the spell
-                            s = self.current_spell(self.rect.center, self.target, self.level)
+                            s = self.current_spell(self.rect.topleft, self.target, self.level)
                             self.spells_in_flight.append(s)
                             self.target = None
                         elif min_cast_range > dist_to_target:
                             # we are too close to cast the spell, so move away if we can
-                            self.rect.center = next
+                            self.rect.topleft = next
                             self.traveled += settings.combat_speed
                         elif dist_to_target > min_cast_range and self.traveled + settings.combat_speed < self.speed:
                             # we are too far to cast, need to move towards our target
-                            self.rect.center = coords.get_next_pos_towards(self.rect.center, self.target.rect.center, settings.combat_speed)
+                            self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft, self.target.rect.topleft, settings.combat_speed)
                         else:
                             # we are too far to cast and cant move anymore
                             self.turn_ptr += 1
@@ -230,11 +230,11 @@ class Witch(Class):
 
     def get_next_position(self, target):
         # get destination away from target
-        dx, dy = target.rect.center[0] - self.rect.center[0], target.rect.center[1] - self.rect.center[1]
-        dest = (self.rect.center[0] - dx, self.rect.center[1] - dy)
-        new_pos = coords.get_next_pos_towards(self.rect.center, dest, settings.combat_speed)
+        dx, dy = target.rect.topleft[0] - self.rect.topleft[0], target.rect.topleft[1] - self.rect.topleft[1]
+        dest = (self.rect.topleft[0] - dx, self.rect.topleft[1] - dy)
+        new_pos = coords.get_next_pos_towards(self.rect.topleft, dest, settings.combat_speed)
         if new_pos[0] < 0 or new_pos[0] > settings.WIDTH or \
                 new_pos[1] < 0 or new_pos[1] > settings.HEIGHT:
             # if we are going to move off screen, move towards the center instead i guess?
             dest = (settings.WIDTH / 2, settings.HEIGHT / 2)
-        return coords.get_next_pos_towards(self.rect.center, dest, settings.combat_speed)
+        return coords.get_next_pos_towards(self.rect.topleft, dest, settings.combat_speed)

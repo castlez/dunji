@@ -64,7 +64,7 @@ class CombatScene(Scene):
         self.turn_order = []
         sp = self.start_pos.copy()
         for player in settings.players:
-            player.rect.center = sp.pop(0)
+            player.rect.topleft = sp.pop(0)
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/gen_ui.png")

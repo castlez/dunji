@@ -10,7 +10,7 @@ class Shop(pygame.sprite.Sprite):
         self.wares = wares
         self.img = img
         self.rect = self.img.get_rect()
-        self.rect.center = pos
+        self.rect.topleft = pos
         self.show_wares = False
 
     def update(self):

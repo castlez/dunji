@@ -18,11 +18,11 @@ class Shuriken(Item):
 
     def update(self):
         if self.target:
-            self.rect = coords.get_next_pos_towards(self.rect.center, self.target.rect.center, 10)
+            self.rect = coords.get_next_pos_towards(self.rect.topleft, self.target.rect.topleft, 10)
             if self.rect.colliderect(self.target.rect):
                 self.target.take_damage(5)
                 self.target = None
 
     def draw(self, screen):
         if self.target:
-            screen.blit(self.img, self.rect.center)
+            screen.blit(self.img, self.rect.topleft)

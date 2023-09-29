@@ -40,7 +40,7 @@ class ShopScene(Scene):
     def __init__(self):
         sp = self.start_pos.copy()
         for player in settings.players:
-            player.rect.center = sp.pop(0)
+            player.rect.topleft = sp.pop(0)
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/gen_ui.png")
@@ -61,6 +61,9 @@ class ShopScene(Scene):
                      img=pygame.image.load(f"src/sprites/shops/shop_{random.randint(1,3)}.png"),
                      pos=loc)
             self.shops.append(s)
+
+        # what we are hovering over
+        self.hover = None
 
 
     @staticmethod
@@ -92,6 +95,15 @@ class ShopScene(Scene):
             # TODO ACTUALLY SHOP
             self.done = True
 
+        # check if we are hovering over a shops wares
+        for shop in self.shops:
+            if shop.show_wares:
+                for item in shop.wares:
+                    if item.rect.collidepoint(mouse.get_pos()):
+                        self.hover = item
+                        return
+        self.hover = None
+
     def draw(self, screen):
         if self.phase == 0:
             screen.blit(self.start_img, self.start_pos)
@@ -105,9 +117,16 @@ class ShopScene(Scene):
             item_step = 34
             if shop.show_wares:
                 for i, item in enumerate(shop.wares):
+                    p = (item_start[0] + item_step*i, item_start[1])
+                    item.rect.topleft = p
                     screen.blit(item.img,
                                 (item_start[0] + item_step*i, item_start[1]))
                     settings.render_text(f"X{item.count}",
                                          (item_start[0] + 20 + item_step*i, item_start[1]))
+                    if self.hover == item:
+                        hover_pos = (self.log_box_pos[0] - 3, self.log_box_pos[1] - 15)
+                        settings.render_text(f"{item.name}",
+                                             hover_pos)
                 screen.blit(self.ind, (self.shop_loc[k][0]-60, self.shop_loc[k][1]-25))
+
         super().draw(screen)

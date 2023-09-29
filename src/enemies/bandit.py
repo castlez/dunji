@@ -30,13 +30,13 @@ class Bandit(Enemy):
                         if player.hp > 0:
                             if not closest:
                                 closest = player
-                            elif coords.distance(self.rect.center, player.rect.center) < coords.distance(self.rect.center, closest.rect.center):
+                            elif coords.distance(self.rect.topleft, player.rect.topleft) < coords.distance(self.rect.topleft, closest.rect.topleft):
                                 closest = player
                     self.target = closest
                 else:
                     stopped = False
                     if not self.in_melee(self.target):
-                        stopped = self.move_towards(self.target.rect.center)
+                        stopped = self.move_towards(self.target.rect.topleft)
                     if self.in_melee(self.target) or stopped:
                         self.turn_ptr += 1
                         self.traveled = 0

@@ -22,7 +22,7 @@ class MapOption(pygame.sprite.Sprite):
         self.scene = scene
 
     def place(self, x, y):
-        self.rect.center = (x, y)
+        self.rect.topleft = (x, y)
 
     def update(self):
         pass
@@ -32,9 +32,9 @@ class MapOption(pygame.sprite.Sprite):
             dark = pygame.Surface((self.img_d.get_width(), self.img_d.get_height()), flags=pygame.SRCALPHA)
             dark.fill((50, 50, 50, 0))
             self.img_d.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
-            screen.blit(self.img_d, self.rect.center)
+            screen.blit(self.img_d, self.rect.topleft)
         else:
-            screen.blit(self.img, self.rect.center)
+            screen.blit(self.img, self.rect.topleft)
 
 
 class MapScene(Scene):

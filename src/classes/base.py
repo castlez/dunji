@@ -41,7 +41,7 @@ class Class(pygame.sprite.Sprite):
         parray = pygame.PixelArray(self.img)
         parray.replace(settings.WHITE, color)
         self.rect = self.img.get_rect()
-        self.rect.center = (0, 0)
+        self.rect.topleft = (0, 0)
 
         # player state
         self.status_location = None
@@ -65,17 +65,17 @@ class Class(pygame.sprite.Sprite):
         # TODO also these values need tweaking, the click box isnt quite right
         x_off = 13
         y_off = 41
-        self.trect.center = (self.status_location[0], self.status_location[1] + y_off)
-        self.srect.center = (self.status_location[0] + x_off, self.status_location[1] + y_off)
-        self.arect.center = (self.status_location[0] + x_off*2, self.status_location[1] + y_off)
-        self.irect.center = (self.status_location[0] + x_off - 4, self.status_location[1] + y_off + 15)
+        self.trect.topleft = (self.status_location[0], self.status_location[1] + y_off)
+        self.srect.topleft = (self.status_location[0] + x_off, self.status_location[1] + y_off)
+        self.arect.topleft = (self.status_location[0] + x_off*2, self.status_location[1] + y_off)
+        self.irect.topleft = (self.status_location[0] + x_off - 4, self.status_location[1] + y_off + 15)
 
         settings.render_text(f"HP: {self.hp}",
                              (self.status_location[0], self.status_location[1] + settings.CELL_SIZE))
-        screen.blit(self.trait_img, self.trect.center)
-        screen.blit(self.status_img, self.srect.center)
-        screen.blit(self.ability_img, self.arect.center)
-        screen.blit(self.inven_img, self.irect.center)
+        screen.blit(self.trait_img, self.trect.topleft)
+        screen.blit(self.status_img, self.srect.topleft)
+        screen.blit(self.ability_img, self.arect.topleft)
+        screen.blit(self.inven_img, self.irect.topleft)
 
     def take_damage(self, damage):
         if self.alive:
@@ -119,7 +119,7 @@ class Class(pygame.sprite.Sprite):
     def draw(self, screen):
         if type(settings.current_scene) != MapScene:
             if self.alive:
-                screen.blit(self.img, self.rect.center)
+                screen.blit(self.img, self.rect.topleft)
             else:
-                screen.blit(self.dead_img, self.rect.center)
+                screen.blit(self.dead_img, self.rect.topleft)
 
