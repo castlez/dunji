@@ -41,7 +41,7 @@ class Shop(pygame.sprite.Sprite):
                 if player.check_traits(Clepto):
                     # try to steal it
                     roll = random.randint(1, 20)
-                    if roll > 13:
+                    if roll > 10:
                         # success, get the item for free
                         player_item.count += 1
                         self.wares.remove(item)
@@ -50,9 +50,9 @@ class Shop(pygame.sprite.Sprite):
                         player_item.count += 1
                         self.wares.remove(item)
                         player.pay_gold(item.value * 2)
+                        settings.chaos += 1
                     break
                 player_item.count += 1
-                print(player.traits)
                 self.wares.remove(item)
                 player.pay_gold(item.value)
                 break

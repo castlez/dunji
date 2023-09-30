@@ -152,11 +152,10 @@ class Class(pygame.sprite.Sprite):
                     break
 
     def update(self):
-        # TODO these arent scaling with screen size correctly and
-        # TODO are really close together?
-        new_inven = []
-        for item in self.inven:
-            if item.count > 0 and item.name != "Gold":
+        # update inventory
+        new_inven = [self.inven[0]]  # pre-add gold
+        for item in self.inven[1:]:
+            if item.count > 0:
                 new_inven.append(item)
         self.inven = new_inven
         if mouse.get_pressed()[0]:

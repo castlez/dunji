@@ -36,6 +36,7 @@ class MapOption(pygame.sprite.Sprite):
             self.img_d.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
             screen.blit(self.img_d, self.rect.topleft)
         else:
+            self.desc_lines = self.scene.get_description(self.floor)
             screen.blit(self.img, self.rect.topleft)
 
 

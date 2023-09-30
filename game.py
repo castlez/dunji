@@ -29,16 +29,17 @@ def main():
     from src.classes.traits.sweet_tooth import SweetTooth
     from src.classes.traits.giver import Giver
     from src.classes.traits.hoarder import Hoarder
+    from src.classes.traits.peace_keeper import PeaceKeeper
     settings.players = [
         Witch(color=settings.RED,
               starting_inven=[Coins(), Gem()],
-              traits=[Hoarder()]),
+              traits=[PeaceKeeper()]),
         Witch(color=settings.BLUE,
               starting_inven=[Coins(), HPPot()],
-              traits=[SweetTooth(), Giver()]),
+              traits=[Clepto()]),
         Witch(color=settings.GREEN,
               starting_inven=[Coins(), Gem()],
-              traits=[])
+              traits=[Clepto()])
     ]
     settings.current_scene = TitleScene()
 
@@ -63,6 +64,8 @@ def main():
                 if event.button == 1:
                     if pygame.key.get_mods() & pygame.KMOD_SHIFT:
                         print(mouse.get_pos()[0], mouse.get_pos()[1])
+                    if pygame.key.get_mods() & pygame.KMOD_CTRL:
+                        settings.chaos += 1
 
         # fill screen black
         settings.screen.fill(settings.BLACK)

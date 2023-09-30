@@ -26,7 +26,7 @@ class Settings:
 
     # state
     players = []
-    chaos = 0
+    chaos = 1
     party_level = 1
     current_scene = None
     current_scene_name = None

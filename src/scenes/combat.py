@@ -20,16 +20,7 @@ from src.engine import keys
 from src.engine import render
 
 
-def get_min_cr(floor=settings.current_floor):
-    return settings.base_cr - settings.chaos + floor
 
-
-def get_max_cr(floor=settings.current_floor):
-    return settings.base_cr + settings.chaos + floor
-
-
-def get_challenge_rating(floor):
-    return random.randint(get_min_cr(floor), get_max_cr(floor))
 
 
 class CombatScene(Scene):
@@ -71,7 +62,7 @@ class CombatScene(Scene):
 
     def __init__(self):
         # Init combat phase
-        self.objective_cr = get_challenge_rating(floor=settings.current_floor)
+        self.objective_cr = self.get_challenge_rating(floor=settings.current_floor)
         self.available_enemies: list[type[Enemy]] = [Bandit, Kobold, Bandit]
         self.enemies = []
         self.turn_order = []
@@ -104,9 +95,20 @@ class CombatScene(Scene):
 
     @staticmethod
     def get_description(floor):
-        ecr = f"{get_min_cr(floor)} - {get_max_cr(floor)}"
+        ecr = f"{CombatScene.get_min_cr(floor)} - {CombatScene.get_max_cr(floor)}"
         return ["A combat encounter",
                 f"Expected CR: {ecr}"]
+    @staticmethod
+    def get_min_cr(floor):
+        return settings.base_cr + floor
+
+    @staticmethod
+    def get_max_cr(floor):
+        return settings.base_cr + (settings.chaos + floor)
+
+    @staticmethod
+    def get_challenge_rating(floor):
+        return random.randint(CombatScene.get_min_cr(floor), CombatScene.get_max_cr(floor))
 
     def update_place_phase(self):
         """
