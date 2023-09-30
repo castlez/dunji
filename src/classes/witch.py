@@ -4,7 +4,7 @@ from src.classes.abilities.witch import *
 class Witch(Class):
 
     def __init__(self, color, starting_inven, traits):
-        super().__init__(name="witch",
+        super().__init__(name="Witch",
                          hit_die=4,
                          speed=30,
                          sprite_img="pc/witch.png",

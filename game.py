@@ -10,6 +10,7 @@ from src.items.gem import Gem
 from src.items.hp_pot import HPPot
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
+from src.scenes.party_select import PartySelectScene
 from src.scenes.shops import ShopScene
 from src.scenes.title import TitleScene
 from src.settings import Settings as settings
@@ -25,23 +26,23 @@ def main():
 
     # Init first scene (TODO update this to actually flow like a game)
     # TODO implement character creation
-    from src.classes.traits.clepto import Clepto
-    from src.classes.traits.sweet_tooth import SweetTooth
-    from src.classes.traits.giver import Giver
-    from src.classes.traits.hoarder import Hoarder
-    from src.classes.traits.peace_keeper import PeaceKeeper
-    from src.classes.traits.sneaky import Sneaky
-    settings.players = [
-        Witch(color=settings.RED,
-              starting_inven=[Coins(), Gem()],
-              traits=[PeaceKeeper(), Sneaky()]),
-        Witch(color=settings.BLUE,
-              starting_inven=[Coins(), HPPot()],
-              traits=[Clepto()]),
-        Witch(color=settings.GREEN,
-              starting_inven=[Coins(), Gem()],
-              traits=[Clepto()])
-    ]
+    # from src.classes.traits.clepto import Clepto
+    # from src.classes.traits.sweet_tooth import SweetTooth
+    # from src.classes.traits.giver import Giver
+    # from src.classes.traits.hoarder import Hoarder
+    # from src.classes.traits.peace_keeper import PeaceKeeper
+    # from src.classes.traits.sneaky import Sneaky
+    # settings.players = [
+    #     Witch(color=settings.RED,
+    #           starting_inven=[Coins(), Gem()],
+    #           traits=[PeaceKeeper(), Sneaky()]),
+    #     Witch(color=settings.BLUE,
+    #           starting_inven=[Coins(), HPPot()],
+    #           traits=[Clepto()]),
+    #     Witch(color=settings.GREEN,
+    #           starting_inven=[Coins(), Gem()],
+    #           traits=[Clepto()])
+    # ]
     settings.current_scene = TitleScene()
 
     # Main Loop
