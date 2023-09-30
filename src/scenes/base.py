@@ -62,3 +62,17 @@ class Scene:
                                                (m[0] + 10, m[1] + 10))
                             render.render_text(trait.description,
                                                (m[0] + 10, m[1] + 20))
+                elif player.show_status == "statuses":
+                    for i, stat in enumerate(player.statuses):
+                        rect = stat.img.get_rect()
+                        rect.topleft = (item_start[0], item_start[1] + item_step*i)
+                        screen.blit(stat.img,
+                                    rect.topleft)
+                        m = mouse.get_pos()
+                        if rect.collidepoint(m):
+                            render.render_text(stat.name,
+                                               (m[0] + 10, m[1] + 10))
+                            render.render_text(stat.description,
+                                               (m[0] + 10, m[1] + 20))
+                            render.render_text(stat.duration,
+                                               (m[0] + 10, m[1] + 30))

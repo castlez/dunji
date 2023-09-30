@@ -286,8 +286,6 @@ class CombatScene(Scene):
             if self.place_range[0][0] < loc[0] < self.place_range[1][0]:
                 if self.place_range[0][1] < loc[1] < self.place_range[1][1]:
                     # add the enemy at the given position
-                    # ignore the constructor error, types are jank in python
-                    # new_pos = (loc[0] - self.holding[0].get_width() // 2, loc[1] - self.holding[0].get_height() // 2)
                     new_pos = (loc[0], loc[1])
                     new_enemies.append(self.available_enemies[self.holding[2]](pos=new_pos))
                     offset += step
