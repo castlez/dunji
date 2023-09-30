@@ -2,7 +2,6 @@ import sys
 
 import pygame
 
-from src.classes.traits.sweet_tooth import SweetTooth
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
@@ -23,6 +22,9 @@ def main():
     settings.initialize()
 
     # Init first scene (TODO update this to actually flow like a game)
+    # TODO implement character creation
+    from src.classes.traits.clepto import Clepto
+    from src.classes.traits.sweet_tooth import SweetTooth
     settings.players = [
         Witch(color=settings.RED,
               starting_inven=[Coins()],
@@ -32,7 +34,7 @@ def main():
               traits=[SweetTooth()]),
         Witch(color=settings.GREEN,
               starting_inven=[Coins()],
-              traits=[])
+              traits=[Clepto()])
     ]
     settings.current_scene = TitleScene()
 

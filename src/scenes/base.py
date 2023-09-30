@@ -43,8 +43,13 @@ class Scene:
                     for i, item in enumerate(player.inven):
                         screen.blit(item.img,
                                     (item_start[0], item_start[1] + item_step*i))
+                        if item.count < 0:
+                            color = settings.RED
+                        else:
+                            color = settings.WHITE
                         render.render_text(f"X{item.count}",
-                                             (item_start[0] + 20, item_start[1] + item_step*i))
+                                           (item_start[0] + 20, item_start[1] + item_step*i),
+                                           color=color)
                 elif player.show_status == "traits":
                     for i, trait in enumerate(player.traits):
                         rect = trait.img.get_rect()

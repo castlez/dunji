@@ -120,6 +120,12 @@ class Class(pygame.sprite.Sprite):
     def pay_gold(self, amount):
         self.inven[0].count -= amount
 
+    def check_traits(self, trait_class):
+        for trait in self.traits:
+            if type(trait) == trait_class:
+                return True
+        return False
+
     def update(self):
         # TODO these arent scaling with screen size correctly and
         # TODO are really close together?
@@ -146,9 +152,8 @@ class Class(pygame.sprite.Sprite):
         # TODO repeat until broke i guess?
         if not self.done:
             priority = [HPPot, Shuriken, Cure, Candy]
-            for t in self.traits:
-                if type(t) == SweetTooth:
-                    priority = [Candy, HPPot, Shuriken, Cure]
+            if self.check_traits(SweetTooth):
+                priority = [Candy, HPPot, Shuriken, Cure]
             if not self.current_shop:
                 for p in priority:
                     for s, shop in enumerate(settings.current_scene.shops):

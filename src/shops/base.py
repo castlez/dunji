@@ -1,5 +1,10 @@
+import random
+
 import pygame
+
+from src.classes.traits.clepto import Clepto
 from src.engine import mouse
+from src.items.base import Item
 from src.settings import Settings as settings
 
 
@@ -33,6 +38,19 @@ class Shop(pygame.sprite.Sprite):
     def buy_item(self, player, item):
         for player_item in player.inven:
             if player_item.name == item.name:
+                if player.check_traits(Clepto):
+                    # try to steal it
+                    roll = random.randint(1, 20)
+                    if roll > 13:
+                        # success, get the item for free
+                        player_item.count += 1
+                        self.wares.remove(item)
+                    else:
+                        # fail, pay double, increase chaos
+                        player_item.count += 1
+                        self.wares.remove(item)
+                        player.pay_gold(item.value * 2)
+                    break
                 player_item.count += 1
                 self.wares.remove(item)
                 player.pay_gold(item.value)
