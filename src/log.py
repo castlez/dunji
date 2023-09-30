@@ -20,6 +20,12 @@ class Log(pygame.sprite.Sprite):
         self.good("5 encounters per session")
         self.good("Good luck!")
         self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
+        self.note("('h' for help, 'l' for log)")
 
     def set_pos(self, pos):
         self.rect.topleft = pos
@@ -70,4 +76,14 @@ class Log(pygame.sprite.Sprite):
     def add_line(self, text, color):
         self.lines.append((text, color))
         self.cur_line += 1
+
+    def scroll(self, y):
+        if y > 0:
+            self.cur_line += 1
+        elif y < 0:
+            self.cur_line -= 1
+        if self.cur_line < 0:
+            self.cur_line = 0
+        elif self.cur_line > len(self.lines):
+            self.cur_line = len(self.lines)
 

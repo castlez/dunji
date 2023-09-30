@@ -72,6 +72,9 @@ def main():
                         settings.chaos += 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
                 settings.log.show = not settings.log.show
+            if event.type == pygame.MOUSEWHEEL:
+                if settings.log.show:
+                    settings.log.scroll(event.y * -1)  # my preferred scroll direction
 
         # fill screen black
         settings.screen.fill(settings.BLACK)
