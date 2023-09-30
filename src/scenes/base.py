@@ -1,6 +1,7 @@
 import pygame
 
 from src.settings import Settings as settings
+from src.engine import render
 
 
 class Scene:
@@ -28,12 +29,12 @@ class Scene:
             player.draw_status(screen)
             if player.show_status:
                 screen.blit(self.info_box, self.info_box_pos)
-                settings.render_text(f"p{i + 1} {player.show_status}",
+                render.render_text(f"p{i + 1} {player.show_status}",
                                      (self.info_box_pos[0] + 8,
                                       self.info_box_pos[1] + 5))
                 if player.show_status == "inven":
                     for i, item in enumerate(player.inven):
                         screen.blit(item.img,
                                     (item_start[0], item_start[1] + item_step*i))
-                        settings.render_text(f"X{item.count}",
+                        render.render_text(f"X{item.count}",
                                              (item_start[0] + 20, item_start[1] + item_step*i))

@@ -45,11 +45,3 @@ class Settings:
         cls.screen.fill(cls.BLACK)
         cls.font = pygame.font.Font("src/sprites/8bitOperatorPlus8-Regular.ttf", 10 + cls.SCALEFACTOR)
         cls.current_scene = None
-
-    @classmethod
-    def render_text(cls, text, pos, size=None, color=WHITE):
-        if size:
-            f = pygame.font.Font("src/sprites/8bitOperatorPlus8-Regular.ttf", size + cls.SCALEFACTOR)
-        else:
-            f = cls.font
-        cls.screen.blit(f.render(text, True, color), pos)

@@ -3,10 +3,15 @@ import random
 import pygame
 
 from src.engine import mouse
+from src.items.candy import Candy
+from src.items.cure import Cure
+from src.items.hp_pot import HPPot
+from src.items.shuriken import Shuriken
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
 from src.scenes.shops import ShopScene
 from src.settings import Settings as settings
+from src.engine import render
 
 
 class Class(pygame.sprite.Sprite):
@@ -50,6 +55,7 @@ class Class(pygame.sprite.Sprite):
         self.abilities = ["todo abilities"]
         self.inven = starting_inven
         self.show_status = None
+        self.current_shop = None
 
         # number of actions per turn
         # candy increases this by 1
@@ -70,7 +76,7 @@ class Class(pygame.sprite.Sprite):
         self.arect.topleft = (self.status_location[0] + x_off*2, self.status_location[1] + y_off)
         self.irect.topleft = (self.status_location[0] + x_off - 4, self.status_location[1] + y_off + 15)
 
-        settings.render_text(f"HP: {self.hp}",
+        render.render_text(f"HP: {self.hp}",
                              (self.status_location[0], self.status_location[1] + settings.CELL_SIZE))
         screen.blit(self.trait_img, self.trect.topleft)
         screen.blit(self.status_img, self.srect.topleft)
@@ -113,8 +119,12 @@ class Class(pygame.sprite.Sprite):
                 self.show_status = None
 
         # if we are in shop scene, shop freely
+        # TODO for now: hppot > shuriken > cure > candy
+        priority = [HPPot, Shuriken, Cure, Candy]
         if type(settings.current_scene) == ShopScene:
-            pass  # TODO go shopping
+            if not self.current_shop:
+                for shop in settings.current_scene.shops:
+                    pass
 
     def draw(self, screen):
         if type(settings.current_scene) != MapScene:

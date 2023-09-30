@@ -13,8 +13,10 @@ from src.enemies.base import Enemy
 from src.enemies.kobold import Kobold
 from src.settings import Settings as settings
 from src.scenes.base import Scene
-from src.engine import  mouse
+from src.engine import mouse
 from src.engine import keys
+from src.engine import render
+
 
 
 class CombatScene(Scene):
@@ -179,18 +181,18 @@ class CombatScene(Scene):
     def draw_place_phase(self, screen):
         # display placement box
         screen.blit(self.place_img, self.place_img_pos)
-        settings.render_text(f"Place enemies and objects",
+        render.render_text(f"Place enemies and objects",
                              self.place_text_pos,
                              color=settings.RED)
 
         # display objective box
         screen.blit(self.objective_box, self.objective_pos)
-        settings.render_text(f"Current CR: {self.current_cr}",
+        render.render_text(f"Current CR: {self.current_cr}",
                              self.obj_text_pos,
                              color=settings.WHITE if self.current_cr < self.objective_cr else settings.GREEN)
-        settings.render_text(f"Required CR: {self.objective_cr}",
+        render.render_text(f"Required CR: {self.objective_cr}",
                              (self.obj_text_pos[0], self.obj_text_pos[1] + 10))
-        settings.render_text(f"Combat Traits: ",
+        render.render_text(f"Combat Traits: ",
                              (self.obj_text_pos[0], self.obj_text_pos[1] + 20))
         screen.blit(self.start_img, self.start_cbt_pos)
 

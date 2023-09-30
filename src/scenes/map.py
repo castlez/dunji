@@ -5,6 +5,8 @@ import pygame
 from src.scenes.base import Scene
 from src.settings import Settings as settings
 from src.engine import mouse
+from src.engine import render
+
 
 # scenes
 from src.scenes.combat import CombatScene
@@ -113,7 +115,7 @@ class MapScene(Scene):
                 color = settings.RED
             else:
                 color = settings.WHITE
-            settings.render_text(f"F{i+1}", self.floor_labels[i], color=color)
+            render.render_text(f"F{i+1}", self.floor_labels[i], color=color)
             for j, scene in enumerate(row):
                 scene.draw(screen)
 
@@ -123,7 +125,7 @@ class MapScene(Scene):
                 if opt.rect.collidepoint(mouse.get_pos()):
                     for i, line in enumerate(opt.desc_lines):
                         y_offset = 30 * len(opt.desc_lines)
-                        settings.render_text(line, (mouse.get_pos()[0], mouse.get_pos()[1] - y_offset + 20 * i))
+                        render.render_text(line, (mouse.get_pos()[0], mouse.get_pos()[1] - y_offset + 20 * i))
         super().draw(screen)
 
 

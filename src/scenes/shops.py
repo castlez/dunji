@@ -6,6 +6,8 @@ from src.engine import mouse
 from src.scenes.base import Scene
 from src.settings import Settings as settings
 from src.shops.base import Shop
+from src.engine import render
+
 
 # items
 from src.items.candy import Candy
@@ -27,6 +29,7 @@ class ShopScene(Scene):
     p2_display_pos = (82, status_y)
     p3_display_pos = (142, status_y)
     info_box_pos = (20, 20)
+    blacklist_prompt_pos = (145, 92)
 
     log_box_pos = (200, 230)
 
@@ -65,6 +68,11 @@ class ShopScene(Scene):
         # what we are hovering over
         self.hover = None
 
+        # blacklist
+
+        # index of blacklisted shop in self.shops
+        self.blacklisted_shop = None
+        self.blacklist_img = pygame.image.load("src/sprites/shops/blacklist.png")
 
     @staticmethod
     def get_map_icon():
@@ -90,7 +98,11 @@ class ShopScene(Scene):
                     if self.start_pos[1] + self.start_img.get_height() > m[1] > self.start_pos[1]:
                         # go to the shop phase
                         self.phase = 1
-                        print("start")
+                        return
+                # check if a shop was blacklisted
+                for i, shop in enumerate(self.shops):
+                    if shop.rect.collidepoint(m):
+                        self.blacklisted_shop = i
         elif self.phase == 1:
             # TODO ACTUALLY SHOP
             self.done = True
@@ -115,18 +127,25 @@ class ShopScene(Scene):
             shop.draw(screen)
             item_start = self.log_box_pos
             item_step = 34
+
+            # draw x over blacklisted shop
+            if self.blacklisted_shop == k:
+                screen.blit(self.blacklist_img, (shop.rect.center[0] - 20, shop.rect.center[1] - 20))
+
             if shop.show_wares:
                 for i, item in enumerate(shop.wares):
                     p = (item_start[0] + item_step*i, item_start[1])
                     item.rect.topleft = p
                     screen.blit(item.img,
                                 (item_start[0] + item_step*i, item_start[1]))
-                    settings.render_text(f"X{item.count}",
+                    render.render_text(f"X{item.count}",
                                          (item_start[0] + 20 + item_step*i, item_start[1]))
                     if self.hover == item:
                         hover_pos = (self.log_box_pos[0] - 3, self.log_box_pos[1] - 15)
-                        settings.render_text(f"{item.name} - {item.description}",
-                                             hover_pos)
-                screen.blit(self.ind, (self.shop_loc[k][0]-40, self.shop_loc[k][1]))
-
+                        render.render_text(f"{item.name} - {item.description}",
+                                           hover_pos)
+                screen.blit(self.ind, (self.shop_loc[k][0]-35, self.shop_loc[k][1] + 14))
+        if self.phase == 0:
+            if self.blacklisted_shop is None:
+                render.render_text("Blacklist 1 shop", self.blacklist_prompt_pos)
         super().draw(screen)
