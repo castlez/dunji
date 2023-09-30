@@ -108,7 +108,7 @@ class Class(pygame.sprite.Sprite):
         self.hp += random.randint(1, self.hit_die)
 
     def take_turn(self):
-        raise NotImplementedError()
+        self.use_item()
 
     def die(self):
         self.alive = False
@@ -125,6 +125,27 @@ class Class(pygame.sprite.Sprite):
             if type(trait) == trait_class:
                 return True
         return False
+
+    def check_items(self, item_class):
+        for item in self.inven:
+            if type(item) == item_class:
+                return True
+        return False
+
+    def use_item(self):
+        if self.hp + 10 <= self.max_hp and self.check_items(HPPot):
+            for item in self.inven:
+                if type(item) == HPPot:
+                    item.count -= 1
+                    self.hp += 10
+                    break
+
+        # purge empty items
+        new_inven = []
+        for item in self.inven:
+            if item.count > 0:
+                new_inven.append(item)
+        self.inven = new_inven
 
     def update(self):
         # TODO these arent scaling with screen size correctly and
