@@ -13,9 +13,6 @@ class TitleScene(Scene):
     def get_map_icon():
         raise NotImplementedError()
 
-    def get_info_box_data(self):
-        raise NotImplementedError()
-
     def __init__(self):
         self.img = pygame.image.load("src/sprites/ui/title_screen.png")
 

@@ -81,11 +81,9 @@ class ShopScene(Scene):
         return pygame.image.load("src/sprites/nav/shops_encounter_icon.png")
 
     @staticmethod
-    def get_description():
-        return "Shops"
-
-    def get_info_box_data(self):
-        raise NotImplementedError()  # wtf is this?
+    def get_description(floor):
+        # TODO do something with the floor this shop is on
+        return ["Shops"]
 
     def update(self):
         for player in settings.players:

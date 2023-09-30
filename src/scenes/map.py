@@ -19,7 +19,7 @@ class MapOption(pygame.sprite.Sprite):
         self.img = scene.get_map_icon()
         self.img_d = scene.get_map_icon()
         self.rect = self.img.get_rect()
-        self.desc_lines = scene.get_description()
+        self.desc_lines = scene.get_description(floor)
         self.floor = floor
         self.scene = scene
 
@@ -89,6 +89,10 @@ class MapScene(Scene):
                     case 1:
                         x += 75
                 scene.place(x, y)
+
+    @staticmethod
+    def get_map_icon():
+        return "this is the map you dork"
 
     def update(self):
         for player in settings.players:

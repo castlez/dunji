@@ -16,13 +16,20 @@ class Scene:
     def get_map_icon():
         raise NotImplementedError()
 
-    def get_info_box_data(self):
-        raise NotImplementedError()
-
     def update(self):
         raise NotImplementedError()
 
     def draw(self, screen):
+        # states shown on every screen
+        stat_start = (5, 5)
+        stat_step = 10
+        stats = [
+            f"Party Level: {settings.party_level}",
+            f"Chaos: {settings.chaos}"
+        ]
+        for stat in stats:
+            render.render_text(stat, stat_start)
+            stat_start = (stat_start[0], stat_start[1] + stat_step)
         item_start = (self.info_box_pos[0] + 8, self.info_box_pos[1] + 20)
         item_step = 34
         for i, player in enumerate(settings.players):
