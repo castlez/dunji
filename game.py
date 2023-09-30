@@ -70,7 +70,7 @@ def main():
                         print(mouse.get_pos()[0], mouse.get_pos()[1])
                     if pygame.key.get_mods() & pygame.KMOD_CTRL:
                         settings.chaos += 1
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
                 settings.log.show = not settings.log.show
 
         # fill screen black
@@ -82,12 +82,17 @@ def main():
         # draw scene
         settings.current_scene.draw(settings.screen)
 
-        # draw log
+        # draw log box before scale
         if settings.log.show:
-            settings.log.draw(settings.screen)
+            settings.log.draw_log_box(settings.screen)
 
         new_size = (settings.window.get_width(), settings.window.get_height())
         settings.window.blit(pygame.transform.scale(settings.screen, new_size), (0, 0))
+
+        # draw log text after scale
+        if settings.log.show:
+            settings.log.draw()
+
         pygame.display.update()
 
 

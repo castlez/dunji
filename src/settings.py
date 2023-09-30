@@ -24,6 +24,10 @@ class Settings:
     BLUE = (19, 0, 189)
     RED = (140, 0, 0)
     GREEN = (7, 107, 0)
+    BGREEN = (0, 255, 0)
+    BROWN = (107, 71, 0)
+    BBROWN = (220, 120, 0)
+    YELLOW = (255, 255, 0)
     GREY = (100, 100, 100)
 
     # state

@@ -29,7 +29,7 @@ class Scene:
         stats = [
             f"Party Level: {settings.party_level}",
             f"Chaos: {settings.chaos}",
-            f"Show Log: {settings.log.show}",
+            f"Help: 'h'",
         ]
         for stat in stats:
             render.render_text(stat, stat_start)
