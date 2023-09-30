@@ -44,6 +44,7 @@ class ShopScene(Scene):
         sp = self.start_pos.copy()
         for player in settings.players:
             player.rect.topleft = sp.pop(0)
+            player.done = False
 
         # general ui
         self.img = pygame.image.load("src/sprites/ui/gen_ui.png")
@@ -52,6 +53,7 @@ class ShopScene(Scene):
         settings.players[1].status_location = self.p2_display_pos
         settings.players[2].status_location = self.p3_display_pos
         self.start_img = pygame.image.load("src/sprites/ui/cbt_start.png")
+        self.done_img = pygame.image.load("src/sprites/ui/done.png")
         self.start_pos = (11, 190)
         self.ind = pygame.image.load("src/sprites/shops/ind.png")
 
@@ -105,7 +107,25 @@ class ShopScene(Scene):
                         self.blacklisted_shop = i
         elif self.phase == 1:
             # TODO ACTUALLY SHOP
-            self.done = True
+            for player in settings.players:
+                if not player.done:
+                    break
+            else:
+                self.phase = 2
+                return
+            for player in settings.players:
+                player.update_shop()
+        elif self.phase == 2:
+            if mouse.get_pressed()[0]:
+                m = (mouse.get_pos()[0], mouse.get_pos()[1])
+                # checking if start button was pressed
+                if self.start_pos[0] < m[0] < self.start_pos[0] + self.start_img.get_width():
+                    if self.start_pos[1] + self.start_img.get_height() > m[1] > self.start_pos[1]:
+                        # reset and dip
+                        self.phase = 0
+                        self.blacklisted_shop = None
+                        self.done = True
+                        return
 
         # check if we are hovering over a shops wares
         for shop in self.shops:
@@ -117,8 +137,6 @@ class ShopScene(Scene):
         self.hover = None
 
     def draw(self, screen):
-        if self.phase == 0:
-            screen.blit(self.start_img, self.start_pos)
         screen.blit(self.img, (0, 0))
         for player in settings.players:
             player.draw_status(screen)
@@ -145,7 +163,11 @@ class ShopScene(Scene):
                         render.render_text(f"{item.name} - {item.description}",
                                            hover_pos)
                 screen.blit(self.ind, (self.shop_loc[k][0]-35, self.shop_loc[k][1] + 14))
-        if self.phase == 0:
-            if self.blacklisted_shop is None:
-                render.render_text("Blacklist 1 shop", self.blacklist_prompt_pos)
-        super().draw(screen)
+            if self.phase == 0:
+                screen.blit(self.start_img, self.start_pos)
+                if self.blacklisted_shop is None:
+                    render.render_text("Blacklist 1 shop", self.blacklist_prompt_pos)
+            if self.phase == 2:
+                screen.blit(self.done_img, self.start_pos)
+                render.render_text("Click done to continue", self.blacklist_prompt_pos)
+            super().draw(screen)

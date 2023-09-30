@@ -2,7 +2,8 @@ import random
 
 import pygame
 
-from src.engine import mouse
+from src.classes.traits.sweet_tooth import SweetTooth
+from src.engine import mouse, coords
 from src.items.candy import Candy
 from src.items.cure import Cure
 from src.items.hp_pot import HPPot
@@ -53,9 +54,13 @@ class Class(pygame.sprite.Sprite):
         self.traits = ["todo traits"]
         self.statuses = ["todo statuses"]
         self.abilities = ["todo abilities"]
-        self.inven = starting_inven
+        self.inven = starting_inven  # note: gp is always the first item
         self.show_status = None
+        self.done = False
+
+        # shops
         self.current_shop = None
+        self.current_order = None  # item to buy
 
         # number of actions per turn
         # candy increases this by 1
@@ -73,11 +78,11 @@ class Class(pygame.sprite.Sprite):
         y_off = 41
         self.trect.topleft = (self.status_location[0], self.status_location[1] + y_off)
         self.srect.topleft = (self.status_location[0] + x_off, self.status_location[1] + y_off)
-        self.arect.topleft = (self.status_location[0] + x_off*2, self.status_location[1] + y_off)
+        self.arect.topleft = (self.status_location[0] + x_off * 2, self.status_location[1] + y_off)
         self.irect.topleft = (self.status_location[0] + x_off - 4, self.status_location[1] + y_off + 15)
 
         render.render_text(f"HP: {self.hp}",
-                             (self.status_location[0], self.status_location[1] + settings.CELL_SIZE))
+                           (self.status_location[0], self.status_location[1] + settings.CELL_SIZE))
         screen.blit(self.trait_img, self.trect.topleft)
         screen.blit(self.status_img, self.srect.topleft)
         screen.blit(self.ability_img, self.arect.topleft)
@@ -101,6 +106,13 @@ class Class(pygame.sprite.Sprite):
     def die(self):
         self.alive = False
 
+    @property
+    def gold(self):
+        return self.inven[0].count
+
+    def pay_gold(self, amount):
+        self.inven[0].count -= amount
+
     def update(self):
         # TODO these arent scaling with screen size correctly and
         # TODO are really close together?
@@ -118,13 +130,59 @@ class Class(pygame.sprite.Sprite):
                 # TODO if inven is open and you click a shop it closes :(
                 self.show_status = None
 
+    def update_shop(self):
         # if we are in shop scene, shop freely
         # TODO for now: hppot > shuriken > cure > candy
-        priority = [HPPot, Shuriken, Cure, Candy]
-        if type(settings.current_scene) == ShopScene:
+        # for each priority,
+        # search shops till you find it
+        # then go to that shop
+        # repeat until broke i guess?
+        if not self.done:
+            priority = [HPPot, Shuriken, Cure, Candy]
+            for t in self.traits:
+                if type(t) == SweetTooth:
+                    priority = [Candy, HPPot, Shuriken, Cure]
             if not self.current_shop:
-                for shop in settings.current_scene.shops:
-                    pass
+                for p in priority:
+                    for s, shop in enumerate(settings.current_scene.shops):
+                        if s != settings.current_scene.blacklisted_shop:
+                            for item in shop.wares:
+                                if type(item) == p:
+                                    if item.value <= self.gold:
+                                        self.current_shop = shop
+                                        self.current_order = item
+                                        return
+                                    else:
+                                        # out of money, so we are done
+                                        self.current_shop = None
+                                        self.current_order = None
+                                        self.done = True
+                                        return
+                    else:
+                        # nothing to buy, done
+                        self.current_shop = None
+                        self.current_order = None
+                        self.done = True
+            else:
+                # go to the shop and buy the item
+                for item in self.current_shop.wares:
+                    if self.rect.colliderect(self.current_shop):
+                        if not self.current_shop.locked:
+                            self.current_shop.locked = True
+                            self.current_shop.buy_item(self, item)
+                            self.current_shop.locked = False
+                            self.current_shop = None
+                            self.current_order = None
+                            break
+                    else:
+                        # not at the shop, so move towards it
+                        self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft,
+                                                                        self.current_shop.rect.center,
+                                                                        settings.combat_speed)
+                else:
+                    # we were too late, go somewhere else
+                    self.current_shop = None
+                    self.current_order = None
 
     def draw(self, screen):
         if type(settings.current_scene) != MapScene:
@@ -132,4 +190,3 @@ class Class(pygame.sprite.Sprite):
                 screen.blit(self.img, self.rect.topleft)
             else:
                 screen.blit(self.dead_img, self.rect.topleft)
-

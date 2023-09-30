@@ -4,7 +4,7 @@ from src.classes.traits.base import Trait
 from src.items.candy import Candy
 
 
-class SweetTooth(Trait):
+class Hypochondriac(Trait):
 
     def __init__(self):
         super().__init__(name="Hypochondriac",

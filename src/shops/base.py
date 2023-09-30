@@ -12,6 +12,7 @@ class Shop(pygame.sprite.Sprite):
         self.rect = self.img.get_rect()
         self.rect.topleft = pos
         self.show_wares = False
+        self.locked = False  # mutex avoid race
 
     def update(self):
         """
@@ -29,3 +30,14 @@ class Shop(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.img, self.rect)
 
+    def buy_item(self, player, item):
+        for player_item in player.inven:
+            if player_item.name == item.name:
+                player_item.count += 1
+                self.wares.remove(item)
+                player.pay_gold(item.value)
+                break
+        else:
+            player.inven.append(item)
+            self.wares.remove(item)
+            player.pay_gold(item.value)
