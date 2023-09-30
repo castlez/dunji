@@ -7,7 +7,7 @@ class Giver(Trait):
     def __init__(self):
         super().__init__(name="Giver",
                          description="Inventory available to party",
-                         img=pygame.image.load("sprites/traits/sweet_tooth.png"))
+                         img=pygame.image.load("src/sprites/traits/giver.png"))
 
     def action(self):
         return True

@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+from src.classes.traits.giver import Giver
 from src.classes.traits.sweet_tooth import SweetTooth
 from src.engine import mouse, coords
 from src.items.candy import Candy
@@ -133,23 +134,27 @@ class Class(pygame.sprite.Sprite):
         return False
 
     def use_item(self):
-        if self.hp + 10 <= self.max_hp and self.check_items(HPPot):
-            for item in self.inven:
+        for player in settings.players:
+            if player.check_traits(Giver):
+                avail_items = self.inven + player.inven
+                break
+        else:
+            avail_items = self.inven
+        if self.hp + 10 <= self.max_hp:
+            for item in avail_items:
                 if type(item) == HPPot:
                     item.count -= 1
                     self.hp += 10
                     break
 
-        # purge empty items
+    def update(self):
+        # TODO these arent scaling with screen size correctly and
+        # TODO are really close together?
         new_inven = []
         for item in self.inven:
             if item.count > 0:
                 new_inven.append(item)
         self.inven = new_inven
-
-    def update(self):
-        # TODO these arent scaling with screen size correctly and
-        # TODO are really close together?
         if mouse.get_pressed()[0]:
             m = (mouse.get_pos()[0], mouse.get_pos()[1])
             if self.trect.collidepoint(m):

@@ -7,7 +7,7 @@ class PeaceKeeper(Trait):
     def __init__(self):
         super().__init__(name="PeaceKeeper",
                          description="Deescalates conflicts, lowers chaos",
-                         img=pygame.image.load("sprites/traits/peaceKeeper.png"))
+                         img=pygame.image.load("src/spritess/traits/peaceKeeper.png"))
 
     def action(self):
         return True

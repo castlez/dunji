@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+import src.classes.traits.giver
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
@@ -25,13 +26,14 @@ def main():
     # TODO implement character creation
     from src.classes.traits.clepto import Clepto
     from src.classes.traits.sweet_tooth import SweetTooth
+    from src.classes.traits.giver import Giver
     settings.players = [
         Witch(color=settings.RED,
               starting_inven=[Coins()],
               traits=[]),
         Witch(color=settings.BLUE,
               starting_inven=[Coins(), HPPot()],
-              traits=[SweetTooth()]),
+              traits=[SweetTooth(), Giver()]),
         Witch(color=settings.GREEN,
               starting_inven=[Coins()],
               traits=[Clepto()])
