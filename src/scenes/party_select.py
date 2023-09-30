@@ -2,14 +2,12 @@ import random
 
 import pygame
 
-from src.classes.traits.peace_keeper import PeaceKeeper
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
 from src.scenes.base import Scene
 from src.scenes.map import MapScene
 from src.settings import Settings as settings
-from src.shops.base import Shop
 from src.engine import render
 
 
@@ -98,7 +96,7 @@ class PlayerSelect:
 
         # generate traits
         traits = self.trait_pool.copy()
-        for i in range(random.randint(1, 3)):
+        for i in range(random.randint(1, 2)):
             t = traits.pop(random.randint(0, len(traits) - 1))
             player.traits.append(t())
 
@@ -131,7 +129,7 @@ class PlayerSelect:
         screen.blit(self.desc_img, self.desc_rect.topleft)
         render.render_text("Traits | Items",
                            (self.pos[0] - 26, self.pos[1] + 38),
-                           color=settings.BLACK)
+                           color=settings.WHITE)
         render.render_text(self.choices[self.current_choice].name,
                            self.title_pos)
         start = (self.pos[0] - 24, self.pos[1] + 48)

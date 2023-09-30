@@ -33,10 +33,22 @@ class Enemy(pygame.sprite.Sprite):
         self.target = None
         self.traveled = 0  # distance travelled already this turn
 
+        self.statuses = []
+
         self.alive = True
 
     def take_turn(self):
-        raise NotImplementedError()
+        self.do_statuses()
+
+    def do_statuses(self):
+        for status in self.statuses:
+            status.enact()
+
+        new_statuses = []
+        for status in self.statuses:
+            if status.duration > 0:
+                new_statuses.append(status)
+        self.statuses = new_statuses
 
     def take_damage(self, damage):
         self.hp -= damage

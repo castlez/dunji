@@ -17,6 +17,7 @@ from src.scenes.map import MapScene
 from src.scenes.shops import ShopScene
 from src.settings import Settings as settings
 from src.engine import render
+from src.statuses.base import Status
 
 
 class Class(pygame.sprite.Sprite):
@@ -63,7 +64,7 @@ class Class(pygame.sprite.Sprite):
         # player state
         self.status_location = None
         self.traits = traits
-        self.statuses = ["todo statuses"]
+        self.statuses: list[Status] = []
         self.abilities = ["todo abilities"]
         self.inven = starting_inven  # note: gp is always the first item
         self.show_status = None
@@ -113,6 +114,23 @@ class Class(pygame.sprite.Sprite):
 
     def take_turn(self):
         self.use_item()
+        self.do_statuses()
+
+    def do_statuses(self):
+        for status in self.statuses:
+            status.enact()
+
+        new_statuses = []
+        for status in self.statuses:
+            if status.duration > 0:
+                new_statuses.append(status)
+        self.statuses = new_statuses
+
+    def check_statuses(self, status_class):
+        for status in self.statuses:
+            if type(status) == status_class:
+                return True
+        return False
 
     def die(self):
         self.alive = False

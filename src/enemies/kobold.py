@@ -1,6 +1,7 @@
 from src.enemies.base import Enemy
 from src.settings import Settings as settings
 from src.engine import coords
+from src.statuses.poison import Poison
 
 
 class Kobold(Enemy):
@@ -19,9 +20,10 @@ class Kobold(Enemy):
 
     def take_turn(self):
         """
-        Bandits are dumb, they just attack the nearest player
+        kobolds are dumb, they just attack the nearest player
+        they poison tho
         """
-
+        super().take_turn()
         match self.turn[self.turn_ptr]:
             case "move":
                 if not self.target:
@@ -37,6 +39,8 @@ class Kobold(Enemy):
                 if self.target:
                     if self.in_melee(self.target):
                         self.target.take_damage(self.damage)
+                        if not self.target.check_statuses(Poison):
+                            self.target.statuses.append(Poison(self.target, 3))
                     self.target = None
                 self.turn_ptr += 1
             case "done":
