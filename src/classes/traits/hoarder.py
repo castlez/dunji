@@ -7,8 +7,5 @@ class Hoarder(Trait):
 
     def __init__(self):
         super().__init__(name="Hoarder",
-                         description="Only lets values go when necessary",
-                         img=pygame.image.load("src/spritess/traits/hoarder.png"))
-
-    def action(self):
-        return True
+                         description="Hoards all gems",
+                         img=pygame.image.load("src/sprites/traits/hoarder.png"))

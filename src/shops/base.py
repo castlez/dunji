@@ -52,6 +52,7 @@ class Shop(pygame.sprite.Sprite):
                         player.pay_gold(item.value * 2)
                     break
                 player_item.count += 1
+                print(player.traits)
                 self.wares.remove(item)
                 player.pay_gold(item.value)
                 break

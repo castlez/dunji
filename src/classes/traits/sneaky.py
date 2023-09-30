@@ -7,7 +7,7 @@ class Sneaky(Trait):
     def __init__(self):
         super().__init__(name="Sneaky",
                          description="Gets seen last, quite lonely",
-                         img=pygame.image.load("src/spritess/traits/sneaky.png"))
+                         img=pygame.image.load("src/sprites/traits/sneaky.png"))
 
     def action(self):
         return True

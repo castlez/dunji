@@ -6,6 +6,7 @@ import src.classes.traits.giver
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
+from src.items.gem import Gem
 from src.items.hp_pot import HPPot
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
@@ -27,16 +28,17 @@ def main():
     from src.classes.traits.clepto import Clepto
     from src.classes.traits.sweet_tooth import SweetTooth
     from src.classes.traits.giver import Giver
+    from src.classes.traits.hoarder import Hoarder
     settings.players = [
         Witch(color=settings.RED,
-              starting_inven=[Coins()],
-              traits=[]),
+              starting_inven=[Coins(), Gem()],
+              traits=[Hoarder()]),
         Witch(color=settings.BLUE,
               starting_inven=[Coins(), HPPot()],
               traits=[SweetTooth(), Giver()]),
         Witch(color=settings.GREEN,
-              starting_inven=[Coins()],
-              traits=[Clepto()])
+              starting_inven=[Coins(), Gem()],
+              traits=[])
     ]
     settings.current_scene = TitleScene()
 

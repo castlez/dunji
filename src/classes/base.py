@@ -3,10 +3,13 @@ import random
 import pygame
 
 from src.classes.traits.giver import Giver
+from src.classes.traits.hoarder import Hoarder
+from src.classes.traits.hypochondriac import Hypochondriac
 from src.classes.traits.sweet_tooth import SweetTooth
 from src.engine import mouse, coords
 from src.items.candy import Candy
 from src.items.cure import Cure
+from src.items.gem import Gem
 from src.items.hp_pot import HPPot
 from src.items.shuriken import Shuriken
 from src.scenes.combat import CombatScene
@@ -140,7 +143,8 @@ class Class(pygame.sprite.Sprite):
                 break
         else:
             avail_items = self.inven
-        if self.hp + 10 <= self.max_hp:
+        if self.hp + 10 <= self.max_hp or \
+                (self.check_traits(Hypochondriac) and self.hp < self.max_hp):
             for item in avail_items:
                 if type(item) == HPPot:
                     item.count -= 1
@@ -152,7 +156,7 @@ class Class(pygame.sprite.Sprite):
         # TODO are really close together?
         new_inven = []
         for item in self.inven:
-            if item.count > 0:
+            if item.count > 0 and item.name != "Gold":
                 new_inven.append(item)
         self.inven = new_inven
         if mouse.get_pressed()[0]:
@@ -213,9 +217,18 @@ class Class(pygame.sprite.Sprite):
                 for item in self.current_shop.wares:
                     if self.rect.colliderect(self.current_shop):
                         if not self.current_shop.locked:
+                            # sell all gems
+                            for player_item in self.inven:
+                                if type(player_item) == Gem:
+                                    if not self.check_traits(Hoarder):
+                                        self.inven[0].count += player_item.value * player_item.count
+                                        player_item.count = 0
+
                             self.current_shop.locked = True
                             self.current_shop.buy_item(self, item)
                             self.current_shop.locked = False
+
+                            # reset
                             self.current_shop = None
                             self.current_order = None
                             break

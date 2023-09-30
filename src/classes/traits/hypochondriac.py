@@ -9,7 +9,4 @@ class Hypochondriac(Trait):
     def __init__(self):
         super().__init__(name="Hypochondriac",
                          description="Chugs healing potions",
-                         img=pygame.image.load("src/spritess/traits/hypochondriac.png"))
-
-    def action(self):
-        return True
+                         img=pygame.image.load("src/sprites/traits/hypochondriac.png"))
