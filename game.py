@@ -4,10 +4,11 @@ import pygame
 
 import src.classes.traits.giver
 from src.classes.witch import Witch
-from src.engine import mouse
+from src.engine import mouse, keys, render
 from src.items.coins import Coins
 from src.items.gem import Gem
 from src.items.hp_pot import HPPot
+from src.log import Log
 from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
 from src.scenes.party_select import PartySelectScene
@@ -23,6 +24,7 @@ def main():
     # Initial setup
     clock = pygame.time.Clock()
     settings.initialize()
+    settings.log = Log((0, 0))
 
     # Init first scene (TODO update this to actually flow like a game)
     # TODO implement character creation
@@ -68,6 +70,8 @@ def main():
                         print(mouse.get_pos()[0], mouse.get_pos()[1])
                     if pygame.key.get_mods() & pygame.KMOD_CTRL:
                         settings.chaos += 1
+            if event.type == pygame.KEYDOWN:
+                settings.log.show = not settings.log.show
 
         # fill screen black
         settings.screen.fill(settings.BLACK)
@@ -77,6 +81,10 @@ def main():
 
         # draw scene
         settings.current_scene.draw(settings.screen)
+
+        # draw log
+        if settings.log.show:
+            settings.log.draw(settings.screen)
 
         new_size = (settings.window.get_width(), settings.window.get_height())
         settings.window.blit(pygame.transform.scale(settings.screen, new_size), (0, 0))

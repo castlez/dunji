@@ -1,5 +1,7 @@
 import pygame
 
+from src.log import Log
+from src.engine import render
 
 class Settings:
     # clock stuff
@@ -36,6 +38,9 @@ class Settings:
 
     # universal values
     combat_speed = 10
+
+    # log
+    log = None
 
     @classmethod
     def initialize(cls):

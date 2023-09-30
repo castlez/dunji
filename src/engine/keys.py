@@ -1,10 +1,9 @@
 import pygame
-from src.settings import Settings as settings
 
 keys_down = []
 
 
-def get( key, once=False):
+def get(key, up=False):
     parts = key.split("+")
     k_check = parts[-1]
     if len(parts) > 1:
@@ -18,9 +17,14 @@ def get( key, once=False):
         elif mod == "alt":
             if not pygame.key.get_mods() & pygame.KMOD_ALT:
                 return False
-
-    if pygame.key.get_pressed()[getattr(pygame, f"K_{k_check.lower()}")]:
-        return True
+    check = pygame.KEYUP if up else pygame.KEYDOWN
+    for event in pygame.event.get():
+        if event.type == check:
+            print(f"{check}")
+            # if pygame.key.get_pressed()[getattr(pygame, f"K_{k_check.lower()}")]:
+            if pygame.key == getattr(pygame, f"K_{k_check.lower()}"):
+                return True
+    return False
 
 
 def get_number_key():

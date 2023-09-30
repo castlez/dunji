@@ -77,6 +77,9 @@ class ShopScene(Scene):
         self.blacklisted_shop = None
         self.blacklist_img = pygame.image.load("src/sprites/shops/blacklist.png")
 
+        settings.log.set_pos((self.log_box_pos[0] - 5,
+                              self.log_box_pos[1] - 5))
+
     @staticmethod
     def get_map_icon():
         return pygame.image.load("src/sprites/nav/shops_encounter_icon.png")

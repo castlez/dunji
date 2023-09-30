@@ -88,6 +88,10 @@ class CombatScene(Scene):
                                                 self.enemy_list_start[1]),
                                                i))
 
+        settings.log.set_pos((self.enemy_list_start[0] - 5,
+                              self.enemy_list_start[1] - 5))
+
+
     @staticmethod
     def get_map_icon():
         return pygame.image.load("src/sprites/nav/combat_encounter_icon.png")
@@ -139,7 +143,7 @@ class CombatScene(Scene):
             else:
                 # TODO fix this so its not machine gun mode
                 # TODO go into keys.get and make it so it only returns true once per keypress if once is passed
-                if keys.get("ctrl+z", once=True) and self.enemies:
+                if keys.get("ctrl+z", up=True) and self.enemies:
                     n = self.enemies[:-1]
                     self.enemies[-1].die()
                     self.enemies = n

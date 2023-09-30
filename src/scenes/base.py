@@ -12,6 +12,9 @@ class Scene:
 
     done = False
 
+    log_pos = (200, 230)
+    show_log = False
+
     @staticmethod
     def get_map_icon():
         raise NotImplementedError()
@@ -25,11 +28,13 @@ class Scene:
         stat_step = 10
         stats = [
             f"Party Level: {settings.party_level}",
-            f"Chaos: {settings.chaos}"
+            f"Chaos: {settings.chaos}",
+            f"Show Log: {settings.log.show}",
         ]
         for stat in stats:
             render.render_text(stat, stat_start)
             stat_start = (stat_start[0], stat_start[1] + stat_step)
+
         item_start = (self.info_box_pos[0] + 8, self.info_box_pos[1] + 20)
         item_step = 34
         for i, player in enumerate(settings.players):
