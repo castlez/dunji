@@ -97,8 +97,10 @@ class PlayerSelect:
         player.inven.append(random.choice(self.item_pool)())
 
         # generate traits
-        for i in range(random.randint(0, 2)):
-            player.traits.append(random.choice(self.trait_pool)())
+        traits = self.trait_pool.copy()
+        for i in range(random.randint(1, 3)):
+            t = traits.pop(random.randint(0, len(traits) - 1))
+            player.traits.append(t())
 
         # set status location
         player.status_location = self.pos
