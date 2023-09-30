@@ -115,6 +115,21 @@ class Class(pygame.sprite.Sprite):
     def take_turn(self):
         raise NotImplementedError()
 
+    def get_closest_valid_target(self):
+        # find the closest enemy
+        closest = None
+        if settings.current_scene.enemies:
+            closest = settings.current_scene.enemies[0]
+            for enemy in settings.current_scene.enemies:
+                if enemy.alive:
+                    dist_to_enemy = coords.distance(self.rect.topleft, enemy.rect.topleft)
+                    dist_to_closest = coords.distance(self.rect.topleft, closest.rect.topleft)
+                    if not closest:
+                        closest = enemy
+                    elif dist_to_enemy < dist_to_closest:
+                        closest = enemy
+        return closest
+
     def start_turn(self):
         self.use_item()
         self.do_statuses()

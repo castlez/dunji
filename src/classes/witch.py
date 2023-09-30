@@ -51,19 +51,7 @@ class Witch(Class):
                             self.current_spell = self.spells.pop(random.randint(0, len(self.spells) - 1))
                         else:
                             self.current_spell = self.cantrip
-
-                        # find the closest enemy
-                        if settings.current_scene.enemies:
-                            closest = settings.current_scene.enemies[0]
-                            for enemy in settings.current_scene.enemies:
-                                if enemy.alive:
-                                    dist_to_enemy = coords.distance(self.rect.topleft, enemy.rect.topleft)
-                                    dist_to_closest = coords.distance(self.rect.topleft, closest.rect.topleft)
-                                    if not closest:
-                                        closest = enemy
-                                    elif dist_to_enemy < dist_to_closest:
-                                        closest = enemy
-                            self.target = closest
+                            self.target = self.get_closest_valid_target()
                     if self.target:
                         next = self.get_next_position(self.target)  # next position to away from target
                         min_cast_range = self.current_spell.range - self.spell_range_tol
