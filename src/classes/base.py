@@ -31,6 +31,7 @@ class Class(pygame.sprite.Sprite):
                  traits):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
+        self.color = color
         self.hit_die = hit_die
         self.speed = speed
         self.turn_ptr = 0
@@ -151,6 +152,7 @@ class Class(pygame.sprite.Sprite):
         return False
 
     def die(self):
+        settings.log.bad(f"{self.color} {self.name} has died!")
         self.alive = False
 
     @property
@@ -159,6 +161,9 @@ class Class(pygame.sprite.Sprite):
 
     def pay_gold(self, amount):
         self.inven[0].count -= amount
+
+    def log(self, msg):
+        settings.log.info(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
 
     def check_traits(self, trait_class):
         for trait in self.traits:

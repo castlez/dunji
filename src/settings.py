@@ -23,6 +23,7 @@ class Settings:
     WHITE = (255, 255, 255)
     BLUE = (19, 0, 189)
     RED = (140, 0, 0)
+    BRED = (255, 17, 0)
     GREEN = (7, 107, 0)
     BGREEN = (0, 255, 0)
     BROWN = (107, 71, 0)

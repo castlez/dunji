@@ -20,12 +20,6 @@ class Log(pygame.sprite.Sprite):
         self.good("5 encounters per session")
         self.good("Good luck!")
         self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
-        self.note("('h' for help, 'l' for log)")
 
     def set_pos(self, pos):
         self.rect.topleft = pos
@@ -53,8 +47,20 @@ class Log(pygame.sprite.Sprite):
             size = box_height // self.show_lines
             buff = size // 2
             for line in lines:
-                text = "> " + line[0]
-                render.render_text(text, (cur_x, cur_y), color=line[1], size=size, scaled=True)
+                if "|" in line[0]:
+                    # player line needs fancy coloring
+                    # "Witch|255,255,255|has stolen your gold!"
+                    parts = line[0].split("|")
+                    pc = parts[0]
+                    cparts = parts[1].split(",")
+                    color = ( int(cparts[0]), int(cparts[1]), int(cparts[2]))
+                    msg = parts[2]
+                    render.render_text(pc, (cur_x, cur_y), color=color, size=size, scaled=True)
+                    render.render_text(msg, (cur_x + render.get_text_size(pc, size=size, scaled=True)[1], cur_y),
+                                       color=line[1], size=size, scaled=True)
+                else:
+                    text = "> " + line[0]
+                    render.render_text(text, (cur_x, cur_y), color=line[1], size=size, scaled=True)
                 cur_y += buff
 
     def good(self, text):
@@ -63,7 +69,7 @@ class Log(pygame.sprite.Sprite):
 
     def bad(self, text):
         from src.settings import Settings as settings
-        self.add_line(text, settings.RED)
+        self.add_line(text, settings.BRED)
 
     def info(self, text):
         from src.settings import Settings as settings
