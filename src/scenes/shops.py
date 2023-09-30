@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+from src.classes.traits.peace_keeper import PeaceKeeper
 from src.engine import mouse
 from src.scenes.base import Scene
 from src.settings import Settings as settings
@@ -114,6 +115,9 @@ class ShopScene(Scene):
             for player in settings.players:
                 player.update_shop()
         elif self.phase == 2:
+            for player in settings.players:
+                if player.get_traits(PeaceKeeper):
+                    settings.chaos = settings.chaos - 1 if settings.chaos > 0 else 0
             if mouse.get_pressed()[0]:
                 m = (mouse.get_pos()[0], mouse.get_pos()[1])
                 # checking if start button was pressed
