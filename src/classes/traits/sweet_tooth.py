@@ -8,5 +8,5 @@ class SweetTooth(Trait):
 
     def __init__(self):
         super().__init__(name="Sweet Tooth",
-                         description="Eating candy grants an additional action",
-                         img=pygame.image.load("sprites/traits/sweet_tooth.png"))
+                         description="Candy is all that matters",
+                         img=pygame.image.load("src/sprites/traits/sweet_tooth.png"))

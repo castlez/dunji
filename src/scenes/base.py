@@ -1,7 +1,7 @@
 import pygame
 
 from src.settings import Settings as settings
-from src.engine import render
+from src.engine import render, mouse
 
 
 class Scene:
@@ -38,3 +38,15 @@ class Scene:
                                     (item_start[0], item_start[1] + item_step*i))
                         render.render_text(f"X{item.count}",
                                              (item_start[0] + 20, item_start[1] + item_step*i))
+                elif player.show_status == "traits":
+                    for i, trait in enumerate(player.traits):
+                        rect = trait.img.get_rect()
+                        rect.topleft = (item_start[0], item_start[1] + item_step*i)
+                        screen.blit(trait.img,
+                                    rect.topleft)
+                        m = mouse.get_pos()
+                        if rect.collidepoint(m):
+                            render.render_text(trait.name,
+                                               (m[0] + 10, m[1] + 10))
+                            render.render_text(trait.description,
+                                               (m[0] + 10, m[1] + 20))

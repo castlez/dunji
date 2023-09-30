@@ -16,7 +16,14 @@ from src.engine import render
 
 
 class Class(pygame.sprite.Sprite):
-    def __init__(self, name, hit_die, speed, sprite_img, color, starting_inven):
+    def __init__(self,
+                 name,
+                 hit_die,
+                 speed,
+                 sprite_img,
+                 color,
+                 starting_inven,
+                 traits):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.hit_die = hit_die
@@ -51,7 +58,7 @@ class Class(pygame.sprite.Sprite):
 
         # player state
         self.status_location = None
-        self.traits = ["todo traits"]
+        self.traits = traits
         self.statuses = ["todo statuses"]
         self.abilities = ["todo abilities"]
         self.inven = starting_inven  # note: gp is always the first item
@@ -136,7 +143,7 @@ class Class(pygame.sprite.Sprite):
         # for each priority,
         # search shops till you find it
         # then go to that shop
-        # repeat until broke i guess?
+        # TODO repeat until broke i guess?
         if not self.done:
             priority = [HPPot, Shuriken, Cure, Candy]
             for t in self.traits:
@@ -160,9 +167,16 @@ class Class(pygame.sprite.Sprite):
                                         return
                     else:
                         # nothing to buy, done
+                        # TODO this is a gross hack to make sure
+                        # TODO we dont prematurely end the turn
+                        for i, shop in enumerate(settings.current_scene.shops):
+                            if settings.current_scene.blacklisted_shop != i:
+                                if shop.wares:
+                                    break
+                        else:
+                            self.done = True
                         self.current_shop = None
                         self.current_order = None
-                        self.done = True
             else:
                 # go to the shop and buy the item
                 for item in self.current_shop.wares:
@@ -174,6 +188,9 @@ class Class(pygame.sprite.Sprite):
                             self.current_shop = None
                             self.current_order = None
                             break
+                        else:
+                            self.current_shop = None
+                            self.current_order = None
                     else:
                         # not at the shop, so move towards it
                         self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft,

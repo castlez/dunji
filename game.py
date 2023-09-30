@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from src.classes.traits.sweet_tooth import SweetTooth
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
@@ -24,11 +25,14 @@ def main():
     # Init first scene (TODO update this to actually flow like a game)
     settings.players = [
         Witch(color=settings.RED,
-              starting_inven=[Coins()]),
+              starting_inven=[Coins()],
+              traits=[]),
         Witch(color=settings.BLUE,
-              starting_inven=[Coins(), HPPot()]),
+              starting_inven=[Coins(), HPPot()],
+              traits=[SweetTooth()]),
         Witch(color=settings.GREEN,
-              starting_inven=[Coins()])
+              starting_inven=[Coins()],
+              traits=[])
     ]
     settings.current_scene = TitleScene()
 
