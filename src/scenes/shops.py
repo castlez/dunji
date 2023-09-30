@@ -116,7 +116,7 @@ class ShopScene(Scene):
                 player.update_shop()
         elif self.phase == 2:
             for player in settings.players:
-                if player.get_traits(PeaceKeeper):
+                if player.check_traits(PeaceKeeper):
                     settings.chaos = settings.chaos - 1 if settings.chaos > 0 else 0
             if mouse.get_pressed()[0]:
                 m = (mouse.get_pos()[0], mouse.get_pos()[1])

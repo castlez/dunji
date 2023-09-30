@@ -30,10 +30,11 @@ def main():
     from src.classes.traits.giver import Giver
     from src.classes.traits.hoarder import Hoarder
     from src.classes.traits.peace_keeper import PeaceKeeper
+    from src.classes.traits.sneaky import Sneaky
     settings.players = [
         Witch(color=settings.RED,
               starting_inven=[Coins(), Gem()],
-              traits=[PeaceKeeper()]),
+              traits=[PeaceKeeper(), Sneaky()]),
         Witch(color=settings.BLUE,
               starting_inven=[Coins(), HPPot()],
               traits=[Clepto()]),

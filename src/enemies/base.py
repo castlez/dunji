@@ -2,6 +2,7 @@ import math
 
 import pygame
 
+from src.classes.traits.sneaky import Sneaky
 from src.engine import coords
 from src.settings import Settings as settings
 
@@ -73,3 +74,16 @@ class Enemy(pygame.sprite.Sprite):
     def in_melee(self, target):
         return coords.distance(self.rect.topleft, target.rect.topleft) <= 10
 
+    def get_target(self):
+        closest = None
+        for player in settings.players:
+            if player.hp > 0:
+                if not player.check_traits(Sneaky) or len([p for p in settings.players if p.alive]) == 1:
+                    if not closest:
+                        closest = player
+                    elif coords.distance(self.rect.topleft, player.rect.topleft) < \
+                            coords.distance(self.rect.topleft,
+                                            closest.rect.topleft):
+
+                        closest = player
+        return closest

@@ -25,14 +25,7 @@ class Kobold(Enemy):
         match self.turn[self.turn_ptr]:
             case "move":
                 if not self.target:
-                    closest = None
-                    for player in settings.players:
-                        if player.hp > 0:
-                            if not closest:
-                                closest = player
-                            elif coords.distance(self.rect.topleft, player.rect.topleft) < coords.distance(self.rect.topleft, closest.rect.topleft):
-                                closest = player
-                    self.target = closest
+                    self.target = self.get_target()
                 else:
                     stopped = False
                     if not self.in_melee(self.target):
