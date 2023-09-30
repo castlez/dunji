@@ -113,6 +113,9 @@ class Class(pygame.sprite.Sprite):
         self.hp += random.randint(1, self.hit_die)
 
     def take_turn(self):
+        raise NotImplementedError()
+
+    def start_turn(self):
         self.use_item()
         self.do_statuses()
 

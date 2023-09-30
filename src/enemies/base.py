@@ -38,6 +38,9 @@ class Enemy(pygame.sprite.Sprite):
         self.alive = True
 
     def take_turn(self):
+        raise NotImplementedError()
+
+    def start_turn(self):
         self.do_statuses()
 
     def do_statuses(self):

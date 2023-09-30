@@ -20,14 +20,12 @@ from src.engine import keys
 from src.engine import render
 
 
-
-
-
 class CombatScene(Scene):
     phase = 0  # 0 is place phase, 1 is fight phase, 2 is outcome
     enemies = None  # filled in the place phase
     players = None  # filled on init
     holding = None  # used for dragging enemies
+    amount = 0  # used for dragging enemies
 
     # screen locations
     player_screen_start = (12, 230)
@@ -86,7 +84,8 @@ class CombatScene(Scene):
         self.display_enemy_options = []
         for i, enemy in enumerate(self.available_enemies):
             self.display_enemy_options.append((pygame.image.load(f"src/sprites/{enemy.sprite_img}"),
-                                               (self.enemy_list_start[0] + i * self.enemy_list_step, self.enemy_list_start[1]),
+                                               (self.enemy_list_start[0] + i * self.enemy_list_step,
+                                                self.enemy_list_start[1]),
                                                i))
 
     @staticmethod
@@ -98,6 +97,7 @@ class CombatScene(Scene):
         ecr = f"{CombatScene.get_min_cr(floor)} - {CombatScene.get_max_cr(floor)}"
         return ["A combat encounter",
                 f"Expected CR: {ecr}"]
+
     @staticmethod
     def get_min_cr(floor):
         return settings.base_cr + floor
@@ -123,6 +123,9 @@ class CombatScene(Scene):
                     if enemy[1][0] < m[0] < enemy[1][0] + enemy[0].get_width():
                         if enemy[1][1] + enemy[0].get_height() > m[1] > enemy[1][1]:
                             self.holding = (enemy[0], m, i)
+                            if keys.get_number_key():
+                                self.amount = keys.get_number_key()
+                                print(f"placing {self.amount}")
                 else:
                     # checking if start button was pressed
                     if self.start_cbt_pos[0] < m[0] < self.start_cbt_pos[0] + self.start_img.get_width():
@@ -158,11 +161,17 @@ class CombatScene(Scene):
         """
         if not self.enemies:
             self.phase += 1
+            return
+
+        # rebuild turn order excluding dead enemies
+        self.turn_order = settings.players + [e for e in self.enemies if e.alive]
+
         if not self.is_turn:
             self.current_initiative += 1
             if self.current_initiative >= len(self.turn_order):
                 self.current_initiative = 0
             self.is_turn = True
+            self.turn_order[self.current_initiative].start_turn()
             self.turn_order[self.current_initiative].take_turn()
         else:
             self.turn_order[self.current_initiative].take_turn()
@@ -178,7 +187,7 @@ class CombatScene(Scene):
                 new_enemies = []
                 for enemy in self.enemies:
                     if enemy.alive:
-                       new_enemies.append(enemy)
+                        new_enemies.append(enemy)
                 self.enemies = new_enemies
                 # TODO turn order isnt updated so it hangs with dead enemies in the list
                 self.update_fight_phase()
@@ -192,18 +201,21 @@ class CombatScene(Scene):
         # display placement box
         screen.blit(self.place_img, self.place_img_pos)
         render.render_text(f"Place enemies and objects",
-                             self.place_text_pos,
-                             color=settings.RED)
+                           self.place_text_pos,
+                           color=settings.RED)
+        render.render_text(f"Hold numbers to add duplicates",
+                           (self.place_text_pos[0], self.place_text_pos[1] + 10),
+                           color=settings.RED)
 
         # display objective box
         screen.blit(self.objective_box, self.objective_pos)
         render.render_text(f"Current CR: {self.current_cr}",
-                             self.obj_text_pos,
-                             color=settings.WHITE if self.current_cr < self.objective_cr else settings.GREEN)
+                           self.obj_text_pos,
+                           color=settings.WHITE if self.current_cr < self.objective_cr else settings.GREEN)
         render.render_text(f"Required CR: {self.objective_cr}",
-                             (self.obj_text_pos[0], self.obj_text_pos[1] + 10))
+                           (self.obj_text_pos[0], self.obj_text_pos[1] + 10))
         render.render_text(f"Combat Traits: ",
-                             (self.obj_text_pos[0], self.obj_text_pos[1] + 20))
+                           (self.obj_text_pos[0], self.obj_text_pos[1] + 20))
         screen.blit(self.start_img, self.start_cbt_pos)
 
         # current combatants
@@ -219,6 +231,21 @@ class CombatScene(Scene):
         # currently held enemy
         if self.holding:
             screen.blit(self.holding[0], self.holding[1])
+            if self.amount:
+                num = self.amount - 1  # remove the one you already drew
+                cur_x = self.holding[1][0]
+                step = 32
+                offset = 0
+                for i in range(num):
+                    offset += step
+                    if i == 2:
+                        cur_x = self.holding[1][0] + step
+                        offset = 0
+                    elif i == 5:
+                        cur_x = self.holding[1][0] + step * 2
+                        offset = 0
+                    cur_y = self.holding[1][1] + offset
+                    screen.blit(self.holding[0], (cur_x, cur_y))
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
@@ -250,14 +277,34 @@ class CombatScene(Scene):
         :param enemy: tuple (l1, l2, pos, index_in_available_enemies)
         :return:
         """
-        m = mouse.get_pos()
-        if self.place_range[0][0] < m[0] < self.place_range[1][0]:
-            if self.place_range[0][1] < m[1] < self.place_range[1][1]:
-                # add the enemy at the given position
-                # ignore the constructor error, types are jank in python
-                new_pos = (m[0] - self.holding[0].get_width() // 2, m[1] - self.holding[0].get_height() // 2)
-                self.enemies.append(self.available_enemies[self.holding[2]](pos=new_pos))
-                self.holding = None
+        loc = [self.holding[1][0], self.holding[1][1]]
+        new_enemies = []
+        offset = 0
+        step = 32
+        num = self.amount if self.amount else 1
+        for i in range(num):
+            if self.place_range[0][0] < loc[0] < self.place_range[1][0]:
+                if self.place_range[0][1] < loc[1] < self.place_range[1][1]:
+                    # add the enemy at the given position
+                    # ignore the constructor error, types are jank in python
+                    # new_pos = (loc[0] - self.holding[0].get_width() // 2, loc[1] - self.holding[0].get_height() // 2)
+                    new_pos = (loc[0], loc[1])
+                    new_enemies.append(self.available_enemies[self.holding[2]](pos=new_pos))
+                    offset += step
+                    if i == 2:
+                        loc[0] = self.holding[1][0] + step
+                        offset = 0
+                    elif i == 5:
+                        loc[0] = self.holding[1][0] + step * 2
+                        offset = 0
+                    loc[1] = self.holding[1][1] + offset
+                else:
+                    # OVER THE LINE, MARK IT ZERO
+                    new_enemies = None
+                    break
+        if new_enemies:
+            self.enemies += new_enemies
+            self.holding = None
 
     # fight phase
     def get_current_enemies(self):

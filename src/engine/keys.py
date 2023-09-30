@@ -22,5 +22,15 @@ def get( key, once=False):
     if pygame.key.get_pressed()[getattr(pygame, f"K_{k_check.lower()}")]:
         return True
 
+
+def get_number_key():
+    for i in range(10):
+        if pygame.key.get_pressed()[getattr(pygame, f"K_{i}")]:
+            return i
+    else:
+        return None
+
+
 def reset():
-    cls.keys_down = []
+    global keys_down
+    keys_down = []

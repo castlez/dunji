@@ -42,7 +42,6 @@ class Witch(Class):
         max range is either the range of the spell or the players speed
         """
         if self.alive:
-            super().take_turn()
             match self.turn[self.turn_ptr]:
                 case "move":
                     if not self.target:
