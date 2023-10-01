@@ -93,10 +93,17 @@ class Witch(Class):
                     if not self.spells_in_flight:
                         self.turn_ptr += 1
                 case "done":
-                    self.turn_ptr = 0
-                    settings.current_scene.is_turn = False
+                    self.actions -= 1
+                    if self.actions <= 0:
+                        self.turn_ptr = 0
+                        self.actions = self.base_actions
+                        settings.current_scene.is_turn = False
+                    else:
+                        self.turn_ptr = 0
+                        settings.log.good("is taking another turn", self)
 
         else:
+            settings.log.bad("is dead", self)
             settings.current_scene.is_turn = False
 
     def get_next_position(self, target):

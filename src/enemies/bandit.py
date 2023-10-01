@@ -9,7 +9,6 @@ class Bandit(Enemy):
     description = "He's not very nice."
     cr = 2
 
-
     def __init__(self, pos):
         super().__init__(pos=pos,
                          name="Bandit",
@@ -23,6 +22,7 @@ class Bandit(Enemy):
         """
         Bandits are dumb, they just attack the nearest player
         """
+        super().take_turn()
         match self.turn[self.turn_ptr]:
             case "move":
                 if not self.target:

@@ -8,7 +8,9 @@ from src.classes.traits.hoarder import Hoarder
 from src.classes.traits.hypochondriac import Hypochondriac
 from src.classes.traits.sweet_tooth import SweetTooth
 from src.engine import mouse, coords
+from src.items.base import Item
 from src.items.candy import Candy
+from src.items.coins import Coins
 from src.items.cure import Cure
 from src.items.gem import Gem
 from src.items.hp_pot import HPPot
@@ -35,8 +37,10 @@ class Class(pygame.sprite.Sprite):
         self.name = name
         self.color = color
         self.hit_die = hit_die
-        self.max_speed = speed
+        self.base_speed = speed
         self.speed = speed
+        self.base_actions = 1
+        self.actions = 1
         self.turn_ptr = 0
         self.turn = ["move", "action", "done"]
         self.target = None
@@ -149,6 +153,7 @@ class Class(pygame.sprite.Sprite):
         return closest
 
     def start_turn(self):
+        settings.log.info("starts their turn.", self)
         self.use_item()
         self.do_statuses()
 
@@ -198,14 +203,41 @@ class Class(pygame.sprite.Sprite):
                 break
         else:
             avail_items = self.inven
-        if self.hp + 10 <= self.max_hp or \
-                (self.check_traits(Hypochondriac) and self.hp < self.max_hp):
-            for item in avail_items:
+
+        # use the next item that makes sense
+        # this is technically a priority list right now
+        # since the loop breaks after item use, i think that's ok
+        used_item: Item = None  # noqa
+        for item in avail_items:
+            if type(item) == Gem or type(item) == Coins:
+                continue
+            # Health Potion
+            if self.hp + 10 <= self.max_hp or \
+                    (self.check_traits(Hypochondriac) and self.hp < self.max_hp):
                 if type(item) == HPPot:
-                    item.count -= 1
-                    self.hp += 10
-                    settings.log.good(f"used {item.name} healing 10!", self)
+                    used_item = item
                     break
+            # Cure
+            if self.statuses:
+                if type(item) == Cure:
+                    item.use(self)
+                    used_item = item
+                    break
+
+            # Candy
+            if type(item) == Candy:
+                item.use(self)
+                used_item = item
+                break
+
+            # Shuriken
+            if type(item) == Shuriken:
+                pass
+
+        # update item count and log
+        if used_item:
+            used_item.count -= 1
+            settings.log.good(f"used {used_item.name}.", self)
 
     def update(self):
         # update inventory

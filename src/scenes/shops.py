@@ -105,6 +105,7 @@ class ShopScene(Scene):
                         if self.blacklisted_shop:
                             # go to the shop phase
                             self.phase = 1
+                            settings.log.show = True
                             return
                 # check if a shop was blacklisted
                 for i, shop in enumerate(self.shops):

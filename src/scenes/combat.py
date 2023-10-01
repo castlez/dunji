@@ -138,6 +138,7 @@ class CombatScene(Scene):
                                 # go to the fight phase
                                 self.turn_order = settings.players + self.enemies
                                 self.phase = 1
+                                settings.log.show = True
                             else:
                                 pass  # TODO display error message
             else:

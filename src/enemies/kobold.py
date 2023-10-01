@@ -24,6 +24,7 @@ class Kobold(Enemy):
         kobolds are dumb, they just attack the nearest player
         they poison tho
         """
+        super().take_turn()
         match self.turn[self.turn_ptr]:
             case "move":
                 if not self.target:

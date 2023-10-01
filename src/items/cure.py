@@ -12,4 +12,5 @@ class Cure(Item):
                          value=10)
 
     def use(self, target):
-        target.statuses = []
+        for status in target.statuses:
+            status.duration = 0

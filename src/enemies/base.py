@@ -12,6 +12,7 @@ class Enemy(pygame.sprite.Sprite):
     sprite_img = None  # list of sprite layers
     cr = 0  # challenge rating
     description = "An enemy"
+    color = settings.GREY
 
     def __init__(self, pos, name, hp, damage, speed, description, sprite_img):
         pygame.sprite.Sprite.__init__(self)
@@ -27,7 +28,7 @@ class Enemy(pygame.sprite.Sprite):
         # edit color of enemy for spice
         parray = pygame.PixelArray(self.img)
         # TODO do better coloring of enemies
-        parray.replace(settings.WHITE, settings.GREY)
+        parray.replace(settings.WHITE, self.color)
 
         self.turn_ptr = 0
         self.turn = ["move", "action", "done"]
@@ -39,9 +40,10 @@ class Enemy(pygame.sprite.Sprite):
         self.alive = True
 
     def take_turn(self):
-        raise NotImplementedError()
+        pass
 
     def start_turn(self):
+        settings.log.info(" starts their turn.", self)
         self.do_statuses()
 
     def do_statuses(self):

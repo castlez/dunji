@@ -19,5 +19,5 @@ class Slow(Status):
             settings.log.info(f"is slowed (left: {self.duration})", self.target)
             self.target.speed = self.target.speed // 2
         else:
-            self.target.speed = self.target.max_speed
+            self.target.speed = self.target.base_speed
             settings.log.info("'s slow ended'", self.target)

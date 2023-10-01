@@ -6,7 +6,7 @@ from src.items.base import Item
 class Coins(Item):
 
     def __init__(self):
-        super().__init__(name="Lovely money",
+        super().__init__(name="Gold Coins",
                          description="Buy stuff with it",
                          img=pygame.image.load("src/sprites/items/coin.png"),
                          value=10)
