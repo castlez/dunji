@@ -18,3 +18,4 @@ def get_pos_raw():
 
 def get_pressed():
     return pygame.mouse.get_pressed()
+

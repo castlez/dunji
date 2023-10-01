@@ -131,7 +131,7 @@ class NCEScene(Scene):
                     self.encounter.resolve(choice)
 
                 # rescale outcome box
-                size_x = render.get_text_size(self.encounter.choices[self.encounter.final_choice])[0] - 60
+                size_x = render.get_text_size(self.encounter.outcome)[0] - 60
                 self.outcome_box_img = pygame.transform.scale(self.outcome_box_img, (size_x, self.outcome_box_rect.height))
                 self.outcome_box_rect = self.outcome_box_img.get_rect()
                 self.outcome_box_rect.topleft = (settings.WIDTH - size_x - 5, self.outcome_box_rect.top + 6)
@@ -156,8 +156,8 @@ class NCEScene(Scene):
         render.render_text(f"{self.encounter.name}", (self.outcome_box_rect.left + 5, self.outcome_box_rect.top + 5))
         render.render_text(f"Outcome chosen:",
                            (self.outcome_box_rect.left + 5, self.outcome_box_rect.top + 20))
-        parts = self.encounter.choices[self.encounter.final_choice].split(')', 1)
-        outcome = parts[1]
+        parts = self.encounter.outcome.split(']', 1)
+        outcome = parts[1] if len(parts) > 1 else self.encounter.outcome
         render.render_text(outcome,
                            (self.outcome_box_rect.left, self.outcome_box_rect.top + 30))
 

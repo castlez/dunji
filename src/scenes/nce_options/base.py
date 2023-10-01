@@ -35,7 +35,6 @@ class NCEOption:
         self.prect.topleft = (settings.WIDTH - prompt_x - 5, prompt_y)
 
         # choices
-        self.final_choice = None
         self.choice_ir = []  # choice (image, rects)
         for i, c in enumerate(self.choices):
             size_x = render.get_text_size(c)[0]
@@ -46,6 +45,11 @@ class NCEOption:
             base_y = self.prect.bottom + 2
             rect.topleft = (settings.WIDTH - size_x - 5, base_y + ((size_y+2)*i))
             self.choice_ir.append((img, rect))
+
+        # final outcome
+        # will be one of the choices if the encounter is resolved normally
+        # will be something special if it was resolved by the first voter's traits/state
+        self.outcome = None
 
     def get_vote(self, player):
         """
@@ -76,7 +80,7 @@ class NCEOption:
         Each encounter needs to implement this method
         in order to resolve the encounter's effects
         """
-        self.final_choice = choice
+        self.outcome = self.choices[choice]
         self.done = True
 
     def update(self):
