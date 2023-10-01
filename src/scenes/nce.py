@@ -130,7 +130,16 @@ class NCEScene(Scene):
                     choice = results.index(max(results))
                     self.encounter.resolve(choice)
 
-                # check if we clicked done
+                # rescale outcome box
+                size_x = render.get_text_size(self.encounter.choices[self.encounter.final_choice])[0] - 60
+                self.outcome_box_img = pygame.transform.scale(self.outcome_box_img, (size_x, self.outcome_box_rect.height))
+                self.outcome_box_rect = self.outcome_box_img.get_rect()
+                self.outcome_box_rect.topleft = (settings.WIDTH - size_x - 5, self.outcome_box_rect.top + 6)
+
+                # done button
+                if self.done_rect.collidepoint(mouse.get_pos()):
+                    if mouse.get_pressed()[0]:
+                        self.done = True
 
     def draw_choose_order(self, screen):
         render.render_text("Choose a voting order by clicking slimes in the info box", self.instructions_pos)
@@ -147,8 +156,10 @@ class NCEScene(Scene):
         render.render_text(f"{self.encounter.name}", (self.outcome_box_rect.left + 5, self.outcome_box_rect.top + 5))
         render.render_text(f"Outcome chosen:",
                            (self.outcome_box_rect.left + 5, self.outcome_box_rect.top + 20))
-        render.render_text(f"{self.encounter.choices[self.encounter.final_choice]}",
-                           (self.outcome_box_rect.left + 5, self.outcome_box_rect.top + 30))
+        parts = self.encounter.choices[self.encounter.final_choice].split(')', 1)
+        outcome = parts[1]
+        render.render_text(outcome,
+                           (self.outcome_box_rect.left, self.outcome_box_rect.top + 30))
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
