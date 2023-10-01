@@ -77,6 +77,7 @@ class FireBolt(Spell):
                          img=pygame.image.load("src/sprites/pc/witch_fire_bolt.png"))
 
     def on_hit(self, target):
+        settings.log.info(f"{target.name} got hit by fireball for {self.damage}!")
         target.take_damage(self.damage)
 
 
@@ -98,8 +99,11 @@ class MagicMissile(Spell):
                          img=pygame.image.load("src/sprites/pc/witch_magic_missile.png"))
 
     def on_hit(self, target):
+        total = 0
         for _ in range(self.level):
+            total += self.damage
             target.take_damage(self.damage)
+        settings.log.info(f"{target.name} got hit by Magic Missile for {total}!")
 
     def draw(self, screen):
         if self.alive:

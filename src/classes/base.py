@@ -108,6 +108,7 @@ class Class(pygame.sprite.Sprite):
     def take_damage(self, damage):
         if self.alive:
             self.hp -= damage
+            settings.log.bad(f"took {damage} damage!", self)
             if self.hp <= 0:
                 self.die()
 
@@ -156,7 +157,7 @@ class Class(pygame.sprite.Sprite):
         return False
 
     def die(self):
-        settings.log.bad(f"{self.color} {self.name} has died!")
+        settings.log.bad("has died!", self)
         self.alive = False
 
     @property
@@ -165,15 +166,6 @@ class Class(pygame.sprite.Sprite):
 
     def pay_gold(self, amount):
         self.inven[0].count -= amount
-
-    def log_info(self, msg):
-        settings.log.info(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
-
-    def log_good(self, msg):
-        settings.log.good(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
-
-    def log_bad(self, msg):
-        settings.log.bad(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
 
     def check_traits(self, trait_class):
         for trait in self.traits:
@@ -200,6 +192,7 @@ class Class(pygame.sprite.Sprite):
                 if type(item) == HPPot:
                     item.count -= 1
                     self.hp += 10
+                    settings.log.good(f"used {item.name} healing 10!", self)
                     break
 
     def update(self):

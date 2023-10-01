@@ -52,6 +52,8 @@ class PlayerSelect:
     ]
 
     def __init__(self, color, pos):
+        super().__init__()
+
         # player select locations
         self.pos = pos
         self.left_img = pygame.image.load("src/sprites/shops/ind.png")

@@ -42,6 +42,8 @@ class ShopScene(Scene):
     start_pos = [(50, 50), (78, 82), (50, 114)]
 
     def __init__(self):
+        super().__init__()
+
         sp = self.start_pos.copy()
         for player in settings.players:
             player.rect.topleft = sp.pop(0)

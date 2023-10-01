@@ -14,6 +14,8 @@ class TitleScene(Scene):
         raise NotImplementedError()
 
     def __init__(self):
+        super().__init__()
+
         self.img = pygame.image.load("src/sprites/ui/title_screen.png")
 
     def update(self):

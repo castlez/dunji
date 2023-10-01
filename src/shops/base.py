@@ -53,16 +53,16 @@ class Shop(pygame.sprite.Sprite):
                         player.log_bad(f"got caught stealing {item.name}, increasing chaos!")
                         settings.chaos += 1
                         player.pay_gold(item.value * 2)
-                        player.log_info(f"paid {item.value * 2} gold for {item.name}!")
+                        settings.log.info(f"paid {item.value * 2} gold for {item.name}!", player)
 
                     break
                 player_item.count += 1
                 self.wares.remove(item)
                 player.pay_gold(item.value)
-                player.log_info(f"paid {item.value} gold for {item.name}.")
+                settings.log.info(f"paid {item.value} gold for {item.name}.", player)
                 break
         else:
             player.inven.append(item)
             self.wares.remove(item)
             player.pay_gold(item.value)
-            player.log_info(f"paid {item.value} gold for {item.name}.")
+            settings.log.info(f"paid {item.value} gold for {item.name}.", player)

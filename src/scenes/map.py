@@ -67,6 +67,8 @@ class MapScene(Scene):
                     (start_x - 20, start_y_label - step * 4)]
 
     def __init__(self):
+        super().__init__()
+
         self.img = pygame.image.load("src/sprites/ui/map_back.png")
 
         settings.players[0].status_location = self.p1_display_pos

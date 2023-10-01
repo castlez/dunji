@@ -59,6 +59,7 @@ class CombatScene(Scene):
     is_turn = False
 
     def __init__(self):
+        super().__init__()
         # Init combat phase
         self.objective_cr = self.get_challenge_rating(floor=settings.current_floor)
         self.available_enemies: list[type[Enemy]] = [Bandit, Kobold, Bandit]

@@ -15,6 +15,10 @@ class Scene:
     log_pos = (200, 230)
     show_log = False
 
+    def __init__(self):
+        if settings.log:
+            settings.log.show = False
+
     @staticmethod
     def get_map_icon():
         raise NotImplementedError()

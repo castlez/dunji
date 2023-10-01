@@ -60,27 +60,31 @@ class Log(pygame.sprite.Sprite):
                     render.render_text(msg, (cur_x + render.get_text_size(pc, size=size, scaled=True)[1], cur_y),
                                        color=line[1], size=size, scaled=True)
                 else:
-                    text = "> " + line[0]
+                    text = line[0]
                     render.render_text(text, (cur_x, cur_y), color=line[1], size=size, scaled=True)
                 cur_y += buff
 
-    def good(self, text):
+    def good(self, text, source=None):
         from src.settings import Settings as settings
-        self.add_line(text, settings.BGREEN)
+        self.add_line(text, settings.BGREEN, source=source)
 
-    def bad(self, text):
+    def bad(self, text, source=None):
         from src.settings import Settings as settings
-        self.add_line(text, settings.BRED)
+        self.add_line(text, settings.BRED, source=source)
 
-    def info(self, text):
+    def info(self, text, source=None):
         from src.settings import Settings as settings
-        self.add_line(text, settings.WHITE)
+        self.add_line(text, settings.WHITE, source=source)
 
-    def note(self, text):
+    def note(self, text, source=None):
         from src.settings import Settings as settings
-        self.add_line(text, settings.YELLOW)
+        self.add_line(text, settings.YELLOW, source=source)
 
-    def add_line(self, text, color):
+    def add_line(self, text, color, source=None):
+        if source:
+            text = (f"{source.name}|"
+                    f"{source.color[0]},{source.color[1]},{source.color[2]}|"
+                    f"{text}")
         self.lines.append((text, color))
         print(text)
         self.cur_line += 1
