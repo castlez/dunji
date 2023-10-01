@@ -12,7 +12,7 @@ class Kobold(Enemy):
 
     def __init__(self, pos):
         super().__init__(pos=pos,
-                         name="Kobold",
+                         name="Kobold ",
                          hp=1,
                          damage=1,
                          speed=60,

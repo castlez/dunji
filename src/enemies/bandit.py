@@ -11,7 +11,7 @@ class Bandit(Enemy):
 
     def __init__(self, pos):
         super().__init__(pos=pos,
-                         name="Bandit",
+                         name="Bandit ",
                          hp=10,
                          damage=2,
                          speed=60,

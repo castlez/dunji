@@ -69,6 +69,10 @@ class CombatScene(Scene):
         for player in settings.players:
             player.rect.topleft = sp.pop(0)
 
+        # not player, not enemy objects in combat
+        # stuff like exploding barrels and shurikens
+        self.objects = []
+
         # general ui
         self.img = pygame.image.load("src/sprites/ui/gen_ui.png")
         self.img = pygame.transform.scale(self.img, (settings.WIDTH, settings.HEIGHT))
@@ -89,6 +93,7 @@ class CombatScene(Scene):
                                                 self.enemy_list_start[1]),
                                                i))
 
+        # log
         settings.log.set_pos((self.enemy_list_start[0] - 5,
                               self.enemy_list_start[1] - 5))
 
@@ -167,6 +172,9 @@ class CombatScene(Scene):
         if not self.enemies:
             self.phase += 1
             return
+
+        for obj in self.objects:
+            obj.update()
 
         # rebuild turn order excluding dead enemies
         self.turn_order = settings.players + [e for e in self.enemies if e.alive]
@@ -277,6 +285,8 @@ class CombatScene(Scene):
                 pass
             case _:
                 raise NotImplementedError()
+        for obj in self.objects:
+            obj.draw(screen)
         super().draw(screen)
 
     # place phase

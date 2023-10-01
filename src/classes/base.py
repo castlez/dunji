@@ -232,7 +232,16 @@ class Class(pygame.sprite.Sprite):
 
             # Shuriken
             if type(item) == Shuriken:
-                pass
+                # only one shuriken at a time cuz im shit
+                for obj in settings.current_scene.objects:
+                    if type(obj) == Shuriken:
+                        break
+                else:
+                    item.use(self.get_closest_valid_target())
+                    item.rect.topleft = self.rect.topleft
+                    settings.current_scene.objects.append(item)
+                    used_item = item
+                    break
 
         # update item count and log
         if used_item:
