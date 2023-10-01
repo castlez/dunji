@@ -14,5 +14,4 @@ class Confused(Status):
 
     def enact(self):
         if self.duration > 0:
-            self.target.hp -= 1
             self.duration -= 1

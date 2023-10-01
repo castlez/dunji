@@ -19,6 +19,7 @@ from src.scenes.shops import ShopScene
 from src.settings import Settings as settings
 from src.engine import render
 from src.statuses.base import Status
+from src.statuses.confused import Confused
 
 
 class Class(pygame.sprite.Sprite):
@@ -124,9 +125,13 @@ class Class(pygame.sprite.Sprite):
     def get_closest_valid_target(self):
         # find the closest enemy
         closest = None
-        if settings.current_scene.enemies:
-            closest = settings.current_scene.enemies[0]
-            for enemy in settings.current_scene.enemies:
+        targets = settings.current_scene.enemies
+        if self.check_statuses(Confused):
+            if random.randint(0, 20) > 10:
+                targets += settings.players
+        if targets:
+            closest = targets[0]
+            for enemy in targets:
                 if enemy.alive:
                     dist_to_enemy = coords.distance(self.rect.topleft, enemy.rect.topleft)
                     dist_to_closest = coords.distance(self.rect.topleft, closest.rect.topleft)

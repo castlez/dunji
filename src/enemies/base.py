@@ -11,6 +11,7 @@ class Enemy(pygame.sprite.Sprite):
     # used for enemy placement
     sprite_img = None  # list of sprite layers
     cr = 0  # challenge rating
+    description = "An enemy"
 
     def __init__(self, pos, name, hp, damage, speed, description, sprite_img):
         pygame.sprite.Sprite.__init__(self)

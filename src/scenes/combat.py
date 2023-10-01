@@ -92,7 +92,6 @@ class CombatScene(Scene):
         settings.log.set_pos((self.enemy_list_start[0] - 5,
                               self.enemy_list_start[1] - 5))
 
-
     @staticmethod
     def get_map_icon():
         return pygame.image.load("src/sprites/nav/combat_encounter_icon.png")
@@ -232,6 +231,16 @@ class CombatScene(Scene):
         # enemy placement options
         for opt in self.display_enemy_options:
             screen.blit(opt[0], opt[1])
+
+            # if hovering the enemy, render text of its description
+            if opt[1][0] < mouse.get_pos()[0] < opt[1][0] + opt[0].get_width():
+                if opt[1][1] + opt[0].get_height() > mouse.get_pos()[1] > opt[1][1]:
+                    render.render_text(self.available_enemies[opt[2]].__name__,
+                                        (mouse.get_pos()[0], mouse.get_pos()[1] - 30))
+                    render.render_text(self.available_enemies[opt[2]].description,
+                                       (mouse.get_pos()[0], mouse.get_pos()[1] - 20))
+                    render.render_text(f"CR: {self.available_enemies[opt[2]].cr}",
+                                       (mouse.get_pos()[0], mouse.get_pos()[1] - 10))
 
         # currently held enemy
         if self.holding:

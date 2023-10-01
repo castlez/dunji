@@ -7,6 +7,7 @@ from src.statuses.poison import Poison
 class Kobold(Enemy):
     # used for enemy placement
     sprite_img = "baddies/kobold.png"
+    description = "Nasty rat. Poisons"
     cr = 1
 
     def __init__(self, pos):
@@ -15,7 +16,7 @@ class Kobold(Enemy):
                          hp=1,
                          damage=1,
                          speed=60,
-                         description="A kobold. Little nasty rat",
+                         description=self.description,
                          sprite_img=self.sprite_img)
 
     def take_turn(self):

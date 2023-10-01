@@ -6,7 +6,9 @@ from src.engine import coords
 class Bandit(Enemy):
     # used for enemy placement
     sprite_img = "baddies/bandit.png"
+    description = "He's not very nice."
     cr = 2
+
 
     def __init__(self, pos):
         super().__init__(pos=pos,
@@ -14,7 +16,7 @@ class Bandit(Enemy):
                          hp=10,
                          damage=2,
                          speed=60,
-                         description="A bandit. He's not very nice.",
+                         description=self.description,
                          sprite_img=self.sprite_img)
 
     def take_turn(self):
