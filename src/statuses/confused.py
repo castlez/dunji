@@ -1,5 +1,6 @@
 import pygame
 
+from src.settings import Settings as settings
 from src.statuses.base import Status
 
 
@@ -15,3 +16,6 @@ class Confused(Status):
     def enact(self):
         if self.duration > 0:
             self.duration -= 1
+            settings.log.info(f"is confused (left: {self.duration})", self.target)
+        else:
+            settings.log.info("'s confusion ended'", self.target)

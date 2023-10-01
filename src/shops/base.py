@@ -45,12 +45,12 @@ class Shop(pygame.sprite.Sprite):
                         # success, get the item for free
                         player_item.count += 1
                         self.wares.remove(item)
-                        player.log_good(f"stole {item.name}!")
+                        settings.log.good(f"stole {item.name}!", player)
                     else:
                         # fail, pay double, increase chaos
                         player_item.count += 1
                         self.wares.remove(item)
-                        player.log_bad(f"got caught stealing {item.name}, increasing chaos!")
+                        settings.log.bad(f"got caught stealing {item.name}, increasing chaos!", player)
                         settings.chaos += 1
                         player.pay_gold(item.value * 2)
                         settings.log.info(f"paid {item.value * 2} gold for {item.name}!", player)

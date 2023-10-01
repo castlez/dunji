@@ -1,5 +1,6 @@
 import pygame
 
+from src.settings import Settings as settings
 from src.statuses.base import Status
 
 
@@ -14,5 +15,8 @@ class Poison(Status):
 
     def enact(self):
         if self.duration > 0:
-            self.target.hp -= 1
             self.duration -= 1
+            settings.log.info(f"is poisoned (left: {self.duration})", self.target)
+            self.target.take_damage(1)
+        else:
+            settings.log.info("'s poison ended'", self.target)

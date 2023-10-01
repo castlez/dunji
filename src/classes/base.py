@@ -35,6 +35,7 @@ class Class(pygame.sprite.Sprite):
         self.name = name
         self.color = color
         self.hit_die = hit_die
+        self.max_speed = speed
         self.speed = speed
         self.turn_ptr = 0
         self.turn = ["move", "action", "done"]
@@ -46,6 +47,10 @@ class Class(pygame.sprite.Sprite):
         self.max_hp = 10 + hit_die
         self.hp = self.max_hp
         self.alive = True
+
+        # lambda functions for bonus damage
+        self.bonus_damage = None
+        self.bonus_damage_taken = None
 
         # unique id
         self.id = str(uuid.uuid4()).split("-")[0]
@@ -108,6 +113,8 @@ class Class(pygame.sprite.Sprite):
 
     def take_damage(self, damage):
         if self.alive:
+            if self.bonus_damage_taken:
+                damage = self.bonus_damage_taken(damage)
             self.hp -= damage
             settings.log.bad(f"took {damage} damage!", self)
             if self.hp <= 0:
