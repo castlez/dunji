@@ -1,4 +1,5 @@
 import random
+import uuid
 
 import pygame
 
@@ -44,6 +45,9 @@ class Class(pygame.sprite.Sprite):
         self.max_hp = 10 + hit_die
         self.hp = self.max_hp
         self.alive = True
+
+        # unique id
+        self.id = str(uuid.uuid4()).split("-")[0]
 
         # static sprits
         self.dead_img = pygame.image.load("src/sprites/grave.png")
@@ -162,8 +166,14 @@ class Class(pygame.sprite.Sprite):
     def pay_gold(self, amount):
         self.inven[0].count -= amount
 
-    def log(self, msg):
+    def log_info(self, msg):
         settings.log.info(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
+
+    def log_good(self, msg):
+        settings.log.good(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
+
+    def log_bad(self, msg):
+        settings.log.bad(f"{self.name}|{self.color[0]},{self.color[1]},{self.color[2]}|{msg}")
 
     def check_traits(self, trait_class):
         for trait in self.traits:

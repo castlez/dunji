@@ -1,4 +1,5 @@
 import pygame.sprite
+from threading import Lock
 
 
 class Log(pygame.sprite.Sprite):
@@ -75,12 +76,13 @@ class Log(pygame.sprite.Sprite):
         from src.settings import Settings as settings
         self.add_line(text, settings.WHITE)
 
-    def note (self, text):
+    def note(self, text):
         from src.settings import Settings as settings
         self.add_line(text, settings.YELLOW)
 
     def add_line(self, text, color):
         self.lines.append((text, color))
+        print(text)
         self.cur_line += 1
 
     def scroll(self, y):

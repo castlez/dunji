@@ -1,4 +1,5 @@
 import sys
+from threading import Lock
 
 import pygame
 
@@ -46,6 +47,8 @@ def main():
     #           traits=[Clepto()])
     # ]
     settings.current_scene = TitleScene()
+
+
 
     # Main Loop
     while True:
