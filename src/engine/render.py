@@ -14,6 +14,9 @@ def render_text(text, pos, size=None, color=None, scaled=False):
         settings.window.blit(f.render(text, False, color),
                              (pos[0]*settings.SCALEFACTOR, pos[1]*settings.SCALEFACTOR))
     else:
+        # if would go off screen, move it left
+        if pos[0] + f.size(text)[0] > settings.WIDTH:
+            pos = (settings.WIDTH - f.size(text)[0], pos[1])
         settings.screen.blit(f.render(text, True, color), pos)
 
 

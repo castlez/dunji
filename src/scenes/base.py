@@ -35,8 +35,8 @@ class Scene:
             f"Chaos: {settings.chaos}",
             f"Help: 'h'",
         ]
-        for stat in stats:
-            render.render_text(stat, stat_start)
+        for abil in stats:
+            render.render_text(abil, stat_start)
             stat_start = (stat_start[0], stat_start[1] + stat_step)
 
         item_start = (self.info_box_pos[0] + 8, self.info_box_pos[1] + 20)
@@ -72,16 +72,28 @@ class Scene:
                             render.render_text(trait.description,
                                                (m[0] + 10, m[1] + 20))
                 elif player.show_status == "statuses":
-                    for i, stat in enumerate(player.statuses):
-                        rect = stat.img.get_rect()
+                    for i, abil in enumerate(player.statuses):
+                        rect = abil.img.get_rect()
                         rect.topleft = (item_start[0], item_start[1] + item_step*i)
-                        screen.blit(stat.img,
+                        screen.blit(abil.img,
                                     rect.topleft)
                         m = mouse.get_pos()
                         if rect.collidepoint(m):
-                            render.render_text(stat.name,
+                            render.render_text(abil.name,
                                                (m[0] + 10, m[1] + 10))
-                            render.render_text(stat.description,
+                            render.render_text(abil.description,
                                                (m[0] + 10, m[1] + 20))
-                            render.render_text(stat.duration,
+                            render.render_text(abil.duration,
                                                (m[0] + 10, m[1] + 30))
+                elif player.show_status == "abilities":
+                    for i, abil in enumerate(player.abilities):
+                        rect = abil.img.get_rect()
+                        rect.topleft = (item_start[0], item_start[1] + item_step*i)
+                        screen.blit(abil.img,
+                                    rect.topleft)
+                        m = mouse.get_pos()
+                        if rect.collidepoint(m):
+                            render.render_text(abil.__name__,
+                                               (m[0] + 10, m[1] + 10))
+                            render.render_text(abil.description,
+                                               (m[0] + 10, m[1] + 20))

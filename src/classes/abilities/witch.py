@@ -63,6 +63,8 @@ class Spell(Ability):
 
 class FireBolt(Spell):
     range = 110
+    img = pygame.image.load("src/sprites/pc/witch_fire_bolt.png")
+    description = "Basic fire spell"
 
     def __init__(self, pos, spell_target, level):
         super().__init__(pos=pos,
@@ -73,7 +75,7 @@ class FireBolt(Spell):
                          healing=0,
                          target_type="enemy",
                          spell_range=self.range,
-                         description="A basic bolt attack for the witch.",
+                         description="Basic fire spell",
                          img=pygame.image.load("src/sprites/pc/witch_fire_bolt.png"))
 
     def on_hit(self, target):
@@ -84,6 +86,8 @@ class FireBolt(Spell):
 # First Level
 class MagicMissile(Spell):
     range = 150
+    img = pygame.image.load("src/sprites/pc/witch_magic_missile.png")
+    description = "Magic Darts, can be upcasted for more darts"
 
     def __init__(self, pos, spell_target, level):
         super().__init__(pos=pos,
@@ -94,9 +98,8 @@ class MagicMissile(Spell):
                          healing=0,
                          target_type="enemy",
                          spell_range=self.range,
-                         description="A shiny dart flies from the witch's staff, striking the enemy for 4 damage. " \
-                                     "Upcasting increases the number of darts",
-                         img=pygame.image.load("src/sprites/pc/witch_magic_missile.png"))
+                         description=self.description,
+                         img=self.img)
 
     def on_hit(self, target):
         total = 0
