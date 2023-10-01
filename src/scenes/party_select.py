@@ -2,6 +2,9 @@ import random
 
 import pygame
 
+from src.classes.traits.alignment.chaotic import ChaoticAlignment
+from src.classes.traits.alignment.lawful import LawfulAlignment
+from src.classes.traits.alignment.neutral import NeutralAlignment
 from src.classes.witch import Witch
 from src.engine import mouse
 from src.items.coins import Coins
@@ -51,6 +54,12 @@ class PlayerSelect:
         Sneaky
     ]
 
+    align_pool = [
+        LawfulAlignment,
+        NeutralAlignment,
+        ChaoticAlignment
+    ]
+
     def __init__(self, color, pos):
         super().__init__()
 
@@ -96,9 +105,15 @@ class PlayerSelect:
         # starting item
         player.inven.append(random.choice(self.item_pool)())
 
+        # get alignment
+        align = random.choice(self.align_pool)()
+        player.traits.append(align)
+
         # generate traits
+        # chaotic characters get an extra starting trait
+        num_traits = 2 if align.name == "Chaotic" else 1
         traits = self.trait_pool.copy()
-        for i in range(random.randint(1, 2)):
+        for i in range(num_traits):
             t = traits.pop(random.randint(0, len(traits) - 1))
             player.traits.append(t())
 

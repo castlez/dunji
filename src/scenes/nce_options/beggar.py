@@ -13,9 +13,9 @@ class BeggarEvent(NCEOption):
                              "\"Please, friends, I'm hungry. Spare some change?\""
                          ],
                          choices=[
-                             "Each players pays 5 gold to the stranger.",
-                             "Take their change and run. (+3 chaos )",
-                             "Empty pockets, receive blessings"
+                             "1. (Lawful) Empty pockets, receive blessings (chaos=0).",
+                             "2. (Neutral) Each players pays 5 gold to the stranger.",
+                             "3. (Chaotic) Take their change and run (+3 chaos).",
                          ],
                          img=pygame.image.load("src/sprites/nce/beggar.png"))
 
