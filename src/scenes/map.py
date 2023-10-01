@@ -11,6 +11,7 @@ from src.engine import render
 # scenes
 from src.scenes.combat import CombatScene
 from src.scenes.shops import ShopScene
+from src.scenes.nce import NCEScene
 
 
 class MapOption(pygame.sprite.Sprite):
@@ -42,7 +43,7 @@ class MapOption(pygame.sprite.Sprite):
 
 class MapScene(Scene):
     # screen locations
-    info_box_pos = (159, 80)
+    info_box_pos = (0, 0)
     status_x = 100
     start = 40
     step = 80
@@ -74,6 +75,7 @@ class MapScene(Scene):
         settings.players[0].status_location = self.p1_display_pos
         settings.players[1].status_location = self.p2_display_pos
         settings.players[2].status_location = self.p3_display_pos
+        self.log_box_pos = (0, 0)
 
         # build map if we dont have one
         if not settings.map:
@@ -92,6 +94,7 @@ class MapScene(Scene):
                     case 1:
                         x += 75
                 scene.place(x, y)
+        settings.log.set_pos(self.info_box_pos)
 
     @staticmethod
     def get_map_icon():
@@ -146,25 +149,28 @@ class MapScene(Scene):
         Generate a map if there isn't one already
 
         [
-        [floor 1 options],
-        [floor 2 options],
-        [floor 3 options],
-        [floor 4 options],
-        [boss encounter (maybe not always combat?)]
+            [floor 1 options],
+            [floor 2 options],
+            [floor 3 options],
+            [floor 4 options],
+            [boss encounter (maybe not always combat?)]
         ]
 
         Drawn in reverse so you travel up
         :return:
         """
-        scene_types = [CombatScene, ShopScene]
+        scene_types = [CombatScene, ShopScene, NCEScene]
 
-        # the first three floors can have anything
-        for i in range(3):
+        # first floor is always combat, shop, noncombat
+        settings.map.append([MapOption(CombatScene, 0), MapOption(ShopScene, 0), MapOption(NCEScene, 0)])
+
+        # the second and third floors can be anything
+        for i in [1, 2]:
+            # TODO maybe weight them? shouldn't have all shops
             floors = random.randint(2, 4)  # either 2 or 3 floors
             settings.map.append([MapOption(random.choice(scene_types), i) for _ in range(floors)])
 
         # the fourth floor is always a choice between a town and combat
-        # TODO add town scene
         # settings.map.append([random.choice([CombatScene, TownScene])])
         settings.map.append([MapOption(CombatScene, 3), MapOption(ShopScene, 3)])
 

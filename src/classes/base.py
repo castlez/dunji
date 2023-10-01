@@ -15,9 +15,7 @@ from src.items.cure import Cure
 from src.items.gem import Gem
 from src.items.hp_pot import HPPot
 from src.items.shuriken import Shuriken
-from src.scenes.combat import CombatScene
 from src.scenes.map import MapScene
-from src.scenes.shops import ShopScene
 from src.settings import Settings as settings
 from src.engine import render
 from src.statuses.base import Status

@@ -45,8 +45,8 @@ class Log(pygame.sprite.Sprite):
                 begin = self.cur_line - self.show_lines
             lines = self.lines[begin:self.cur_line]
             box_height = self.img.get_height() * settings.SCALEFACTOR
-            size = box_height // self.show_lines
-            buff = size // 2
+            size = box_height // self.show_lines - 2  # boo magic numbers everywhere
+            buff = size // 2.5
             for line in lines:
                 if "|" in line[0]:
                     # player line needs fancy coloring
@@ -54,10 +54,12 @@ class Log(pygame.sprite.Sprite):
                     parts = line[0].split("|")
                     pc = parts[0]
                     cparts = parts[1].split(",")
-                    color = ( int(cparts[0]), int(cparts[1]), int(cparts[2]))
+                    color = (int(cparts[0]), int(cparts[1]), int(cparts[2]))
                     msg = parts[2]
+                    # split dist is the distance between the name and the text itself
+                    split_dist = render.get_text_size(pc, size=size, scaled=True)[1] - 20
                     render.render_text(pc, (cur_x, cur_y), color=color, size=size, scaled=True)
-                    render.render_text(msg, (cur_x + render.get_text_size(pc, size=size, scaled=True)[1], cur_y),
+                    render.render_text(msg, (cur_x + split_dist, cur_y),
                                        color=line[1], size=size, scaled=True)
                 else:
                     text = line[0]

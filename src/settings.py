@@ -12,7 +12,7 @@ class Settings:
     window = None
     WIDTH = 400
     HEIGHT = 300
-    SCALEFACTOR = int(1000 / WIDTH)
+    SCALEFACTOR = 2.5
     CELL_SIZE = 32
 
     # text
@@ -53,5 +53,5 @@ class Settings:
         cls.window = pygame.display.set_mode((cls.WIDTH * cls.SCALEFACTOR, cls.HEIGHT * cls.SCALEFACTOR))
         pygame.display.set_caption("Dunji")
         cls.screen.fill(cls.BLACK)
-        cls.font = pygame.font.Font("src/sprites/8bitOperatorPlus8-Regular.ttf", 10 + cls.SCALEFACTOR)
+        cls.font = pygame.font.Font("src/sprites/8bitOperatorPlus8-Regular.ttf", int(10 + cls.SCALEFACTOR))
         cls.current_scene = None
