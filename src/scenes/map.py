@@ -131,8 +131,12 @@ class MapScene(Scene):
             for opt in row:
                 if opt.rect.collidepoint(mouse.get_pos()):
                     for i, line in enumerate(opt.desc_lines):
+                        if render.get_text_size(line)[0] + mouse.get_pos()[0] > settings.WIDTH:
+                            x = settings.WIDTH - render.get_text_size(line)[0]
+                        else:
+                            x = mouse.get_pos()[0]
                         y_offset = 30 * len(opt.desc_lines)
-                        render.render_text(line, (mouse.get_pos()[0], mouse.get_pos()[1] - y_offset + 20 * i))
+                        render.render_text(line, (x, mouse.get_pos()[1] - y_offset + 20 * i))
         super().draw(screen)
 
 

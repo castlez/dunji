@@ -102,9 +102,10 @@ class ShopScene(Scene):
                 # checking if start button was pressed
                 if self.start_pos[0] < m[0] < self.start_pos[0] + self.start_img.get_width():
                     if self.start_pos[1] + self.start_img.get_height() > m[1] > self.start_pos[1]:
-                        # go to the shop phase
-                        self.phase = 1
-                        return
+                        if self.blacklisted_shop:
+                            # go to the shop phase
+                            self.phase = 1
+                            return
                 # check if a shop was blacklisted
                 for i, shop in enumerate(self.shops):
                     if shop.rect.collidepoint(m):
