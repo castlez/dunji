@@ -172,6 +172,15 @@ class CombatScene(Scene):
             self.phase += 1
             return
 
+        # this breaks shit if it goes to high
+        # this is because its technically not how fast stuff plays
+        # its actually how far things can move in a frame
+        # which means distance checks will get fucked up
+        if keys.get("up"):
+            settings.combat_speed += 1
+        if keys.get("down"):
+            settings.combat_speed -= 1
+
         for obj in self.objects:
             obj.update()
 

@@ -20,10 +20,15 @@ def get(key, up=True):
     check_type = pygame.KEYUP if up else pygame.KEYDOWN
 
     # reset k_check to be pygame.SPACE if it's "space"
-    if key == "space":
-        check = pygame.K_SPACE
-    else:
-        check = getattr(pygame, f"K_{check}")
+    match key:
+        case "space":
+            check = pygame.K_SPACE
+        case "up":
+            check = pygame.K_UP
+        case "down":
+            check = pygame.K_DOWN
+        case _:
+            check = getattr(pygame, f"K_{check}")
     for event in settings.events:
         if event.type == check_type:
             if event.key == check:
