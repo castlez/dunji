@@ -158,11 +158,22 @@ class CombatScene(Scene):
 
         else:
             # we are holding an enemy
-            if not mouse.get_held()[0]:  # try to place enemy in hand
-                self.try_place_enemy()
-                self.holding = None
+            placeable_enemies = self.try_place_enemy()
+            if placeable_enemies:
+                if not mouse.get_held()[0]:
+                    self.holding = None
+                    self.enemies += placeable_enemies
+                else:
+                    img = self.display_enemy_options[self.holding[2]][0].copy()
+                    img.fill(settings.GREEN, special_flags=pygame.BLEND_ADD)
+                    self.holding = (img,
+                                    (mouse.get_pos()[0] - self.holding[0].get_width() // 2,
+                                     mouse.get_pos()[1] - self.holding[0].get_height() // 2),
+                                    self.holding[2])
             else:  # move enemy in hand
-                self.holding = (self.holding[0],
+                img = self.display_enemy_options[self.holding[2]][0].copy()
+                img.fill(settings.RED, special_flags=pygame.BLEND_ADD)
+                self.holding = (img,
                                 (mouse.get_pos()[0] - self.holding[0].get_width() // 2,
                                  mouse.get_pos()[1] - self.holding[0].get_height() // 2),
                                 self.holding[2])
@@ -349,9 +360,7 @@ class CombatScene(Scene):
                     # OVER THE LINE, MARK IT ZERO
                     new_enemies = None
                     break
-        if new_enemies:
-            self.enemies += new_enemies
-            self.holding = None
+        return new_enemies
 
     # fight phase
     def get_current_enemies(self):
