@@ -41,11 +41,15 @@ class Settings:
     current_floor = 0
     base_cr = 3
 
-    # universal values
+    # combat
     combat_speed = 10
+    fast_play = False  # go to next turn without waiting for user input
 
     # log
     log = None
+
+    # events per frame
+    events = []
 
     @classmethod
     def initialize(cls):

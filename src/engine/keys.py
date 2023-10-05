@@ -1,11 +1,11 @@
 import pygame
-
+from src.settings import Settings as settings
 keys_down = []
 
 
-def get(key, up=False):
+def get(key, up=True):
     parts = key.split("+")
-    k_check = parts[-1]
+    check = parts[-1]
     if len(parts) > 1:
         mod = parts[0]
         if mod == "ctrl":
@@ -17,12 +17,16 @@ def get(key, up=False):
         elif mod == "alt":
             if not pygame.key.get_mods() & pygame.KMOD_ALT:
                 return False
-    check = pygame.KEYUP if up else pygame.KEYDOWN
-    for event in pygame.event.get():
-        if event.type == check:
-            print(f"{check}")
-            # if pygame.key.get_pressed()[getattr(pygame, f"K_{k_check.lower()}")]:
-            if pygame.key == getattr(pygame, f"K_{k_check.lower()}"):
+    check_type = pygame.KEYUP if up else pygame.KEYDOWN
+
+    # reset k_check to be pygame.SPACE if it's "space"
+    if key == "space":
+        check = pygame.K_SPACE
+    else:
+        check = getattr(pygame, f"K_{check}")
+    for event in settings.events:
+        if event.type == check_type:
+            if event.key == check:
                 return True
     return False
 

@@ -147,9 +147,8 @@ class CombatScene(Scene):
                             else:
                                 pass  # TODO display error message
             else:
-                # TODO fix this so its not machine gun mode
-                # TODO go into keys.get and make it so it only returns true once per keypress if once is passed
                 if keys.get("ctrl+z", up=True) and self.enemies:
+                    # undo last enemy placement
                     n = self.enemies[:-1]
                     self.enemies[-1].die()
                     self.enemies = n
@@ -180,12 +179,13 @@ class CombatScene(Scene):
         self.turn_order = settings.players + [e for e in self.enemies if e.alive]
 
         if not self.is_turn:
-            self.current_initiative += 1
-            if self.current_initiative >= len(self.turn_order):
-                self.current_initiative = 0
-            self.is_turn = True
-            self.turn_order[self.current_initiative].start_turn()
-            self.turn_order[self.current_initiative].take_turn()
+            if settings.fast_play or keys.get("space", up=True):
+                self.current_initiative += 1
+                if self.current_initiative >= len(self.turn_order):
+                    self.current_initiative = 0
+                self.is_turn = True
+                self.turn_order[self.current_initiative].start_turn()
+                self.turn_order[self.current_initiative].take_turn()
         else:
             self.turn_order[self.current_initiative].take_turn()
 
@@ -276,6 +276,18 @@ class CombatScene(Scene):
             case 0:  # place
                 self.draw_place_phase(screen)
             case 1:  # fight
+                # render key hints
+                if settings.fast_play:
+                    render.render_text("Press F to toggle off fast play",
+                                       (settings.WIDTH - 100, 10),
+                                       color=settings.RED)
+                else:
+                    render.render_text("Press F to toggle on fast play",
+                                       (settings.WIDTH - 100, 10),
+                                       color=settings.GREEN)
+                    render.render_text("Press SPACE to go to next turn",
+                                       (settings.WIDTH - 100, 20),
+                                       color=settings.GREEN)
                 # current combatants
                 for player in settings.players:
                     player.draw(screen)

@@ -60,7 +60,8 @@ def main():
             settings.current_floor += 1
 
         # check for exit
-        for event in pygame.event.get():
+        settings.events = pygame.event.get()
+        for event in settings.events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -78,6 +79,8 @@ def main():
             if event.type == pygame.MOUSEWHEEL:
                 if settings.log.show:
                     settings.log.scroll(event.y * -1)  # my preferred scroll direction
+            if keys.get("f"):
+                settings.fast_play = not settings.fast_play
 
         # fill screen black
         settings.screen.fill(settings.BLACK)
