@@ -51,6 +51,9 @@ class Settings:
     # events per frame
     events = []
 
+    # game
+    session = 1
+
     @classmethod
     def initialize(cls):
         cls.screen = pygame.Surface((cls.WIDTH, cls.HEIGHT))

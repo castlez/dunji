@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from src.engine import render, mouse
+from src.engine import render, mouse, keys
 from src.scenes.base import Scene
 from src.scenes.nce_options.beggar import BeggarEvent
 from src.settings import Settings as settings
@@ -102,6 +102,8 @@ class NCEScene(Scene):
                 if len(self.action_order) == 3:
                     self.phase = 1
                     return
+        if keys.get("ctrl+z"):
+            self.action_order = []
 
     def update_go(self):
         for i, player in enumerate(self.action_order):

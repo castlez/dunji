@@ -16,6 +16,19 @@ def get_pos_raw():
     return pygame.mouse.get_pos()
 
 
-def get_pressed():
+def get_pressed(up=True):
+    for event in settings.events:
+        if up:
+            if event.type == pygame.MOUSEBUTTONUP:
+                return 1, 0
+            return 0, 0
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                return 1, 0
+            return 0, 0
+    return 0, 0
+
+
+def get_held():
     return pygame.mouse.get_pressed()
 

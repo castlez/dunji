@@ -125,13 +125,16 @@ class CombatScene(Scene):
         then presses start to begin the combat encounter
         """
         if self.holding is None:
-            if mouse.get_pressed()[0]:
+            if mouse.get_held()[0]:
                 m = (mouse.get_pos()[0], mouse.get_pos()[1])
                 # check if we grabbed an enemy from self.display_enemy_options
                 for i, enemy in enumerate(self.display_enemy_options):
                     if enemy[1][0] < m[0] < enemy[1][0] + enemy[0].get_width():
                         if enemy[1][1] + enemy[0].get_height() > m[1] > enemy[1][1]:
-                            self.holding = (enemy[0], m, i)
+                            self.holding = (enemy[0],
+                                            (mouse.get_pos()[0] - enemy[0].get_width() // 2,
+                                             mouse.get_pos()[1] - enemy[0].get_height() // 2),
+                                            i)
                             if keys.get_number_key():
                                 self.amount = keys.get_number_key()
                                 print(f"placing {self.amount}")
@@ -155,7 +158,7 @@ class CombatScene(Scene):
 
         else:
             # we are holding an enemy
-            if not mouse.get_pressed()[0]:  # try to place enemy in hand
+            if not mouse.get_held()[0]:  # try to place enemy in hand
                 self.try_place_enemy()
                 self.holding = None
             else:  # move enemy in hand

@@ -114,6 +114,11 @@ class MapScene(Scene):
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
+        # display current session
+        render.render_text(f"Session {settings.session}", (settings.WIDTH - 100, 5),
+                           color=settings.WHITE,
+                           size=20)
+
         for p in settings.players:
             p.draw_status(screen)
 
@@ -125,7 +130,7 @@ class MapScene(Scene):
                 color = settings.RED
             else:
                 color = settings.WHITE
-            render.render_text(f"F{i+1}", self.floor_labels[i], color=color)
+            render.render_text(f"E{i+1}", self.floor_labels[i], color=color)
             for j, scene in enumerate(row):
                 scene.draw(screen)
 

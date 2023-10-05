@@ -2,7 +2,6 @@ import pygame
 
 from src.settings import Settings as settings
 from src.classes.traits.giver import Giver
-from src.engine import render
 from src.scenes.nce_options.base import NCEOption
 
 
@@ -30,6 +29,25 @@ class BeggarEvent(NCEOption):
             if settings.chaos < 0:
                 settings.chaos = 0
             return
+
+    def resolve(self, choice):
+        super().resolve(choice)
+        match choice:
+            case 0:
+                settings.chaos = 0
+                for player in settings.players:
+                    # also technically clears debt
+                    settings.log.info(f"{player.name} emptied their pockets.", player)
+                    player.inven[0].count = 0
+            case 1:
+                for player in settings.players:
+                    settings.log.info("gave 5 gold to the beggar.", player)
+                    player.inven[0].count -= 5
+            case 2:
+                for player in settings.players:
+                    settings.log.info("stole 5 gold from the beggar.", player)
+                    player.inven[0].count += 5
+                settings.chaos += 3
 
     def update(self):
         super().update()

@@ -83,7 +83,7 @@ class Scene:
                                                (m[0] + 10, m[1] + 10))
                             render.render_text(abil.description,
                                                (m[0] + 10, m[1] + 20))
-                            render.render_text(abil.duration,
+                            render.render_text(f"Turns left: {abil.duration}",
                                                (m[0] + 10, m[1] + 30))
                 elif player.show_status == "abilities":
                     for i, abil in enumerate(player.abilities):

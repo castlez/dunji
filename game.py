@@ -11,6 +11,7 @@ from src.items.gem import Gem
 from src.items.hp_pot import HPPot
 from src.log import Log
 from src.scenes.combat import CombatScene
+from src.scenes.help_box import HelpBox
 from src.scenes.map import MapScene
 from src.scenes.party_select import PartySelectScene
 from src.scenes.shops import ShopScene
@@ -26,6 +27,8 @@ def main():
     clock = pygame.time.Clock()
     settings.initialize()
     settings.log = Log((0, 0))
+    help = HelpBox()
+    show_help = False
 
     # Init first scene (TODO update this to actually flow like a game)
     # TODO implement character creation
@@ -47,8 +50,6 @@ def main():
     #           traits=[Clepto()])
     # ]
     settings.current_scene = TitleScene()
-
-
 
     # Main Loop
     while True:
@@ -81,12 +82,15 @@ def main():
                     settings.log.scroll(event.y * -1)  # my preferred scroll direction
             if keys.get("f"):
                 settings.fast_play = not settings.fast_play
+            if keys.get("h"):
+                show_help = not show_help
 
         # fill screen black
         settings.screen.fill(settings.BLACK)
 
         # update scene
         settings.current_scene.update()
+        help.update()
 
         # draw scene
         settings.current_scene.draw(settings.screen)
@@ -94,6 +98,10 @@ def main():
         # draw log box before scale
         if settings.log.show:
             settings.log.draw_log_box(settings.screen)
+
+        # draw help box
+        if show_help:
+            help.draw(settings.screen)
 
         new_size = (settings.window.get_width(), settings.window.get_height())
         settings.window.blit(pygame.transform.scale(settings.screen, new_size), (0, 0))
