@@ -65,6 +65,7 @@ class FireBolt(Spell):
     range = 110
     img = pygame.image.load("src/sprites/pc/witch_fire_bolt.png")
     description = "Basic fire spell"
+    name = "Fire Bolt"
 
     def __init__(self, pos, spell_target, level):
         super().__init__(pos=pos,
@@ -88,6 +89,7 @@ class MagicMissile(Spell):
     range = 150
     img = pygame.image.load("src/sprites/pc/witch_magic_missile.png")
     description = "Magic Darts, can be upcasted for more darts"
+    name = "Magic Missile"
 
     def __init__(self, pos, spell_target, level):
         super().__init__(pos=pos,

@@ -44,7 +44,7 @@ class CombatScene(Scene):
     # Place Phase
     available_enemies = None  # list of enemies to place
     place_img_pos = (195, 10)
-    place_range = [[195, 10], [380, 210]]  # [top left, bottom right]
+    place_range = [[190, 10], [380, 210]]  # [top left, bottom right] (190 X 200)
     place_text_pos = (199, 16)
     objective_pos = (7, 154)
     objective_range = [[7, 154], [189, 217]]

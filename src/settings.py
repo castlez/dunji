@@ -53,6 +53,7 @@ class Settings:
 
     # game
     session = 1
+    session_boss_option = None
 
     @classmethod
     def initialize(cls):

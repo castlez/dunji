@@ -3,7 +3,7 @@ import math
 import pygame
 
 from src.classes.traits.sneaky import Sneaky
-from src.engine import coords
+from src.engine import coords, render
 from src.settings import Settings as settings
 
 
@@ -18,6 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.hp = hp
+        self.max_hp = hp
         self.damage = damage
         self.speed = speed
         self.description = description
@@ -69,6 +70,8 @@ class Enemy(pygame.sprite.Sprite):
         if not self.img:
             raise Exception("fuck 1")
         screen.blit(self.img, self.rect.topleft)
+        render.render_text(f"{self.hp}/{self.max_hp}",
+                           pos=(self.rect.topleft[0], self.rect.topleft[1]-5))
 
     def move(self, pos):
         # TODO do i need both of these?

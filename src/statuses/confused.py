@@ -8,7 +8,7 @@ class Confused(Status):
 
     def __init__(self, target, duration):
         super().__init__(name="Confused",
-                         description="Might attack friends",
+                         description="Might attack friends or self",
                          duration=duration,
                          img=pygame.image.load("src/sprites/statuses/confused.png"),
                          target=target)

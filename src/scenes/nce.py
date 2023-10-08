@@ -24,10 +24,6 @@ class NCEScene(Scene):
 
     log_box_pos = (200, 230)
 
-    shop_loc = [(256, 12),
-                (331, 87),
-                (247, 153)]
-
     # Player starting positions
     start_pos = [(50, 100), (78, 132), (50, 164)]
 
@@ -111,7 +107,7 @@ class NCEScene(Scene):
         self.phase = 2
 
     def update(self):
-        super().__init__()
+        # super().__init__()
         self.encounter.update()
         match self.phase:
             case 0:

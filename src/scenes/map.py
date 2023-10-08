@@ -3,6 +3,8 @@ import random
 import pygame
 
 from src.scenes.base import Scene
+from src.scenes.boss import BossScene
+from src.scenes.boss_options.lich import LichEvent
 from src.settings import Settings as settings
 from src.engine import mouse
 from src.engine import render
@@ -111,6 +113,7 @@ class MapScene(Scene):
                     if opt.rect.collidepoint(mouse.get_pos()):
                         if opt.floor == settings.current_floor:
                             settings.current_scene = opt.scene()
+                            print(f"new scene: {settings.current_scene}")
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))
@@ -180,5 +183,7 @@ class MapScene(Scene):
         settings.map.append([MapOption(CombatScene, 3), MapOption(ShopScene, 3)])
 
         # boss encounter
-        # TODO add boss scene
-        settings.map.append([MapOption(CombatScene, 4)])
+        settings.session_boss_option = random.choice([
+            LichEvent()
+        ])
+        settings.map.append([MapOption(BossScene, 4)])

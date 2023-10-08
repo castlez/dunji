@@ -22,6 +22,10 @@ class Witch(Class):
         self.current_spell = None
         self.spell_range_tol = settings.combat_speed  # close enough to max range to cast
 
+    def rest(self):
+        super().rest()
+        self.spells = copy.deepcopy(self.known_spells)
+
     def draw(self, screen):
         super().draw(screen)
         if self.alive:
@@ -51,7 +55,8 @@ class Witch(Class):
                             self.current_spell = self.spells.pop(random.randint(0, len(self.spells) - 1))
                         else:
                             self.current_spell = self.cantrip
-                            self.target = self.get_closest_valid_target()
+                        self.target = self.get_closest_valid_target()
+                        settings.log.info(f"fires a {self.current_spell.name} at {self.target.name}!", self)
                     if self.target:
                         next = self.get_next_position(self.target)  # next position to away from target
                         min_cast_range = self.current_spell.range - self.spell_range_tol

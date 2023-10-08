@@ -155,6 +155,10 @@ class Class(pygame.sprite.Sprite):
         self.use_item()
         self.do_statuses()
 
+    def rest(self):
+        self.hp = self.max_hp
+        self.actions = 1
+
     def do_statuses(self):
         for status in self.statuses:
             status.enact()

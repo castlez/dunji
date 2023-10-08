@@ -4,7 +4,7 @@ from src.settings import Settings as settings
 from src.statuses.base import Status
 
 
-class Confused(Status):
+class Rage(Status):
 
     def __init__(self, target, duration):
         super().__init__(name="Rage",

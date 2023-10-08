@@ -130,7 +130,9 @@ class ShopScene(Scene):
                 # checking if start button was pressed
                 if self.start_pos[0] < m[0] < self.start_pos[0] + self.start_img.get_width():
                     if self.start_pos[1] + self.start_img.get_height() > m[1] > self.start_pos[1]:
-                        # reset and dip
+                        # rest, reset and dip
+                        for player in settings.players:
+                            player.rest()
                         self.phase = 0
                         self.blacklisted_shop = None
                         self.done = True
