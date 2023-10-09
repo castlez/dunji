@@ -41,7 +41,6 @@ class Spell(Ability):
         :return:
         """
         if coords.distance(self.start_pos, self.rect.topleft) > self.range:
-            # failsafe, but shouldn't happen since pc only fires if in range
             return True
         return False
 
@@ -57,6 +56,7 @@ class Spell(Ability):
                 if self.level == 0:
                     self.die()
                     return True
+                break
 
         self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft, self.spell_target, settings.combat_speed)
         if self.check_range():
@@ -86,14 +86,24 @@ class FireBolt(Spell):
                          healing=0,
                          target_type="enemy",
                          spell_range=self.range,
-                         description="Basic fire spell, damage varies with chaos",
-                         img=pygame.image.load("src/sprites/pc/witch_fire_bolt.png"))
+                         description=self.description,
+                         img=self.img)
 
     def on_hit(self, target):
         # already level 0 so it will only hit one thing
         dmg = random.randint(self.damage-settings.chaos, self.damage + settings.chaos)
         target.take_damage(dmg)
         settings.log.info(f"got hit by fireball for {dmg}!", target)
+
+    def check_range(self):
+        """
+        Override check range to fly until out of levels
+        or off screen
+        :return:
+        """
+        if self.rect.x > settings.WIDTH or self.rect.x < 0 or self.rect.y > settings.HEIGHT or self.rect.y < 0:
+            return True
+        return False
 
 
 # First Level

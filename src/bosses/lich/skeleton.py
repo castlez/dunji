@@ -11,7 +11,7 @@ class Skele(Enemy):
 
     def __init__(self, pos):
         super().__init__(pos=pos,
-                         name="Skele ",
+                         name="Skele",
                          hp=5,
                          damage=2,
                          speed=60,

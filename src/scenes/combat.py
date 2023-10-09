@@ -103,17 +103,17 @@ class CombatScene(Scene):
 
     @staticmethod
     def get_description(floor):
-        ecr = f"{CombatScene.get_min_cr(floor)} - {CombatScene.get_max_cr(floor)}"
+        ecr = f"{CombatScene.get_min_cr(settings.get_floor_mod(floor))} - {CombatScene.get_max_cr(settings.get_floor_mod(floor))}"
         return ["A combat encounter",
                 f"Expected CR: {ecr}"]
 
     @staticmethod
     def get_min_cr(floor):
-        return settings.base_cr + floor * 3
+        return settings.base_cr + settings.get_floor_mod(floor) * 3
 
     @staticmethod
     def get_max_cr(floor):
-        return settings.base_cr + (settings.chaos + floor * 3)
+        return settings.base_cr + (settings.chaos + settings.get_floor_mod(floor) * 3)
 
     @staticmethod
     def get_challenge_rating(floor):
@@ -228,6 +228,9 @@ class CombatScene(Scene):
                 self.update_fight_phase()
             case 2:  # outcome
                 # TODO outcome screen
+                for player in settings.players:
+                    player.level_up()
+                settings.party_level += 1
                 self.done = True
             case _:
                 raise NotImplementedError()

@@ -40,6 +40,8 @@ class Settings:
     map = []  # multi-dimensional array of scenes
     current_floor = 0  # current floor INDEX
     base_cr = 3
+    session = 1
+
 
     # combat
     combat_speed = 10
@@ -52,8 +54,11 @@ class Settings:
     events = []
 
     # game
-    session = 1
     session_boss_option = None
+
+    @classmethod
+    def get_floor_mod(cls, floor):
+        return floor + (5 * (cls.session - 1))
 
     @classmethod
     def initialize(cls):
