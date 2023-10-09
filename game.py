@@ -50,7 +50,7 @@ def main():
     #           traits=[Clepto()])
     # ]
     settings.current_scene = TitleScene()
-    # settings.current_floor = 3  # TODO debug bosses
+    settings.current_floor = 4  # TODO debug bosses
 
     # Main Loop
     while True:

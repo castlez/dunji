@@ -30,11 +30,10 @@ class Lich(Enemy):
                 player.statuses.append(Poison(target=player,
                                               duration=3))
             settings.log.bad("inflicts players with poison", self)
-            # i = random.randint(0, len(settings.players) - 1)
-            # conf_player = settings.players[i]
-            # conf_player.statuses.append(Confused(target=conf_player,
-            #                                      duration=3))
-            # settings.log.bad(f"has become confused!", conf_player)
+            i = random.randint(0, len(settings.players) - 1)
+            settings.players[i].statuses.append(Confused(target=settings.players[i],
+                                                         duration=3))
+            settings.log.bad(f"has become confused!", settings.players[i])
             self.casted_debuffs = True
         if self.spawn_skele:
             # spawn a skele ever other turn

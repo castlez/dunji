@@ -1,5 +1,6 @@
 import random
 import uuid
+import copy
 
 import pygame
 
@@ -137,7 +138,7 @@ class Class(pygame.sprite.Sprite):
         targets = settings.current_scene.enemies
         if self.check_statuses(Confused):
             if random.randint(0, 20) > 10:
-                targets += settings.players
+                targets = settings.current_scene.enemies + [p for p in settings.players if p != self]
         if targets:
             closest = targets[0]
             for enemy in targets:
