@@ -36,7 +36,7 @@ class Spell(Ability):
 
     def check_range(self):
         """
-        Check if we are we are out of range and the spell
+        Check if we are out of range and the spell
         needs to fizzle
         :return:
         """

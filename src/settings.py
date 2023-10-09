@@ -61,6 +61,15 @@ class Settings:
         return floor + (5 * (cls.session - 1))
 
     @classmethod
+    def get_collidables(cls):
+        collidables = []
+        for player in cls.players:
+            collidables.append(player)
+        for enemy in cls.current_scene.enemies:
+            collidables.append(enemy)
+        return collidables
+
+    @classmethod
     def initialize(cls):
         cls.screen = pygame.Surface((cls.WIDTH, cls.HEIGHT))
         cls.window = pygame.display.set_mode((cls.WIDTH * cls.SCALEFACTOR, cls.HEIGHT * cls.SCALEFACTOR))

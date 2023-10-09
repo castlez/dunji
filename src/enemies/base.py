@@ -88,8 +88,13 @@ class Enemy(pygame.sprite.Sprite):
         dx, dy = dx / dist, dy / dist  # Normalize
         # Move along this normalized vector towards the player
         pos = (self.rect.topleft[0] + dx * settings.combat_speed, self.rect.topleft[1] + dy * settings.combat_speed)
-        self.move(pos)
-        self.traveled += settings.combat_speed
+        for col in settings.get_collidables():
+            if col.rect.collidepoint(pos):
+                stopped = True
+                break
+        else:
+            self.move(pos)
+            self.traveled += settings.combat_speed
         return stopped
 
     def in_melee(self, target):

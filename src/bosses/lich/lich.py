@@ -48,9 +48,11 @@ class Lich(Enemy):
             settings.log.bad(f"has become confused!", settings.players[i])
             self.casted_debuffs = True
         if self.spawn_skele:
-            # spawn a skele ever other turn
+            # spawn a skele ever other turn up to five
             loc = random.choice(self.skele_locs)
-            settings.current_scene.enemies.append(Skele(pos=loc))
+            if len([e for e in settings.current_scene.enemies if type(e) == Skele]) < 5:
+                settings.current_scene.enemies.append(Skele(pos=loc))
+            self.spawn_skele = False
         else:
             self.spawn_skele = True
         settings.current_scene.is_turn = False

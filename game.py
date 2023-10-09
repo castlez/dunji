@@ -51,11 +51,19 @@ def main():
     #           traits=[Clepto()])
     # ]
     settings.current_scene = TitleScene()
-    # settings.current_floor = 2  # TODO debug bosses
-
+    settings.current_floor = 4  # TODO debug bosses
+    cheat = True
     # Main Loop
     while True:
         clock.tick(settings.FRAMERATE)
+
+        if cheat and type(settings.current_scene) == MapScene:
+            for player in settings.players:
+                player.level_up()
+                player.level_up()
+                player.level_up()
+                player.rest()
+            cheat = False
 
         # back to map
         if settings.current_scene.done:

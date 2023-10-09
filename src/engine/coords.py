@@ -1,7 +1,7 @@
 import math
 
 
-def get_next_pos_towards( pos, dest, speed):
+def get_next_pos_towards(pos, dest, speed):
     # Find direction vector (dx, dy) between dest and pos.
     dx, dy = dest[0] - pos[0], dest[1] - pos[1]
     dist = math.hypot(dx, dy)
@@ -25,7 +25,7 @@ def get_new_dest_through(pos, target, max_x, max_y):
         return pos  # if already at location, freeze
     dx, dy = dx / dist, dy / dist  # Normalize
     new_pos = pos
-    while 0 < new_pos[0] < max_x and 0 < new_pos[1] < max_y:
+    while 0 <= new_pos[0] < max_x and 0 <= new_pos[1] < max_y:
         new_pos = new_pos[0] + dx, new_pos[1] + dy
     return new_pos
 
