@@ -22,6 +22,15 @@ class Lich(Enemy):
         self.skele_locs = skele_locs
         self.spawn_skele = False
 
+    def take_damage(self, damage):
+        before_hp = self.hp
+        super().take_damage(damage)
+        # check if we passed below half hp
+        if before_hp > (self.max_hp / 2) > self.hp:
+            # we dropped below half health, ENRAGE
+            self.casted_debuffs = False
+            settings.log.bad("has become enraged!", self)
+
     def take_turn(self):
         super().take_turn()
         if not self.casted_debuffs:
