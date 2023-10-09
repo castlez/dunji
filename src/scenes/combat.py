@@ -109,11 +109,11 @@ class CombatScene(Scene):
 
     @staticmethod
     def get_min_cr(floor):
-        return settings.base_cr + floor
+        return settings.base_cr + floor * 3
 
     @staticmethod
     def get_max_cr(floor):
-        return settings.base_cr + (settings.chaos + floor)
+        return settings.base_cr + (settings.chaos + floor * 3)
 
     @staticmethod
     def get_challenge_rating(floor):
@@ -225,7 +225,6 @@ class CombatScene(Scene):
                     if enemy.alive:
                         new_enemies.append(enemy)
                 self.enemies = new_enemies
-                # TODO turn order isnt updated so it hangs with dead enemies in the list
                 self.update_fight_phase()
             case 2:  # outcome
                 # TODO outcome screen

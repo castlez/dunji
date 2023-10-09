@@ -8,15 +8,18 @@ from src.statuses.poison import Poison
 
 
 class Lich(Enemy):
+    sprite_img = "bosses/lich/lich.png"
+    description = "A nasty and powerful lich"
+    cr = 10
 
     def __init__(self, pos, skele_locs):
         super().__init__(pos=pos,
                          name="Lich",
-                         hp=20,
+                         hp=80,
                          damage=4,
                          speed=1,
-                         description="A nasty and powerful lich",
-                         sprite_img="bosses/lich/lich.png")
+                         description=self.description,
+                         sprite_img=self.sprite_img)
         self.casted_debuffs = False  # cast debuffs at the beginning
         self.color = settings.BLACK
         self.skele_locs = skele_locs

@@ -19,7 +19,6 @@ class Witch(Class):
         self.spells: list[type] = copy.deepcopy(self.known_spells)
         self.spells_in_flight = []
         self.abilities = [self.cantrip] + self.spells
-        self.slots = 0
         self.current_spell = None
         self.spell_range_tol = settings.combat_speed  # close enough to max range to cast
 
@@ -36,8 +35,8 @@ class Witch(Class):
     def level_up(self):
         super().level_up()
         if self.level % 2 == 0:
-            self.slots += 1
             self.known_spells.append(Spellbook.get_new_spell(self.level))
+        settings.log.info("leveled up!", self)
 
     def take_turn(self):
         """

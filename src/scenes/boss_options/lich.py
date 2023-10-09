@@ -50,6 +50,9 @@ class LichEvent(BossOption):
         super().update()
         if settings.current_scene.phase == 1:
             # COMBAT
+            if not settings.current_scene.enemies:
+                settings.current_scene.phase = 2
+                return
             new_enemies = []
             for enemy in settings.current_scene.enemies:
                 if enemy.alive:

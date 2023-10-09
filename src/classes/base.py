@@ -127,7 +127,7 @@ class Class(pygame.sprite.Sprite):
 
     def level_up(self):
         self.level += 1
-        self.hp += random.randint(1, self.hit_die)
+        self.max_hp += random.randint(1, self.hit_die)
 
     def take_turn(self):
         raise NotImplementedError()

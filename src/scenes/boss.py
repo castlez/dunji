@@ -79,7 +79,13 @@ class BossScene(Scene):
         pass
 
     def update(self):
-        settings.session_boss_option.update()
+        match self.phase:
+            case 0:
+                settings.session_boss_option.update()
+            case 1:
+                settings.session_boss_option.update()
+            case 2:
+                self.done = True
 
     def draw(self, screen):
         screen.blit(self.img, (0, 0))

@@ -38,7 +38,7 @@ class Settings:
     current_scene = None
     current_scene_name = None
     map = []  # multi-dimensional array of scenes
-    current_floor = 0
+    current_floor = 0  # current floor INDEX
     base_cr = 3
 
     # combat

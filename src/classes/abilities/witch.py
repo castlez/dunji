@@ -20,8 +20,8 @@ class Spell(Ability):
         self.target_type = target_type
         self.range = spell_range
         self.start_pos = pos
-        self.spell_target = spell_target
-        dest = self.spell_target.rect.topleft
+        self.spell_target = coords.get_new_dest_through(pos, spell_target.rect.topleft, settings.WIDTH, settings.HEIGHT)
+        dest = spell_target.rect.topleft
         rotation = -1 * math.degrees(math.atan2(dest[1] - self.rect.topleft[1], dest[0] - self.rect.topleft[0]))
         self.img = pygame.transform.rotate(self.img, rotation)
 
@@ -34,24 +34,35 @@ class Spell(Ability):
         self.alive = False
         self.kill()
 
+    def check_range(self):
+        """
+        Check if we are we are out of range and the spell
+        needs to fizzle
+        :return:
+        """
+        if coords.distance(self.start_pos, self.rect.topleft) > self.range:
+            # failsafe, but shouldn't happen since pc only fires if in range
+            return True
+        return False
+
     def update(self):
         """
         move the spell towards its target
         if it hits, call on_hit and return True
         """
         # check spell collision
-        self.rect.topleft = self.rect.topleft
-        if self.rect.colliderect(self.spell_target.rect):
+        for enemy in settings.current_scene.enemies:
+            if self.rect.colliderect(enemy.rect):
+                self.on_hit(enemy)
+                if self.level == 0:
+                    self.die()
+                    return True
+
+        self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft, self.spell_target, settings.combat_speed)
+        if self.check_range():
             self.die()
-            self.on_hit(self.spell_target)
             return True
-        else:
-            self.rect.topleft = coords.get_next_pos_towards(self.rect.topleft, self.spell_target.rect.topleft, settings.combat_speed)
-            if coords.distance(self.start_pos, self.rect.topleft) > self.range:
-                # failsafe, but shouldn't happen since pc only fires if in range
-                self.die()
-                return True
-            return False
+        return False
 
     def draw(self, screen):
         if self.alive:
@@ -71,16 +82,18 @@ class FireBolt(Spell):
                          spell_target=spell_target,
                          name="Fire Bolt",
                          level=0,
-                         damage=2,
+                         damage=3,
                          healing=0,
                          target_type="enemy",
                          spell_range=self.range,
-                         description="Basic fire spell",
+                         description="Basic fire spell, damage varies with chaos",
                          img=pygame.image.load("src/sprites/pc/witch_fire_bolt.png"))
 
     def on_hit(self, target):
-        settings.log.info(f"{target.name} got hit by fireball for {self.damage}!")
-        target.take_damage(self.damage)
+        # already level 0 so it will only hit one thing
+        dmg = random.randint(self.damage-settings.chaos, self.damage + settings.chaos)
+        target.take_damage(dmg)
+        settings.log.info(f"got hit by fireball for {dmg}!", target)
 
 
 # First Level
@@ -101,13 +114,26 @@ class MagicMissile(Spell):
                          spell_range=self.range,
                          description=self.description,
                          img=self.img)
+        # set level so its actually goes up every 2 levels
+        self.level = max(1, int(math.floor(level / 2)))
 
     def on_hit(self, target):
-        total = 0
-        for _ in range(self.level):
-            total += self.damage
-            target.take_damage(self.damage)
-        settings.log.info(f"{target.name} got hit by Magic Missile for {total}!")
+        # do damage + level, then decrease the level until its 0
+        if self.level > 0:
+            dmg = self.level + self.damage
+            target.take_damage(dmg)
+            settings.log.info(f"got hit by Magic Missile for {dmg}!", target)
+            self.level -= 1
+
+    def check_range(self):
+        """
+        Override check range to fly until out of levels
+        or off screen
+        :return:
+        """
+        if self.rect.x > settings.WIDTH or self.rect.x < 0 or self.rect.y > settings.HEIGHT or self.rect.y < 0:
+            return True
+        return False
 
     def draw(self, screen):
         if self.alive:

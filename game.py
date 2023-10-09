@@ -27,6 +27,7 @@ def main():
     clock = pygame.time.Clock()
     settings.initialize()
     settings.log = Log((0, 0))
+    settings.log.startup_log()
     help = HelpBox()
     show_help = False
 
@@ -50,7 +51,7 @@ def main():
     #           traits=[Clepto()])
     # ]
     settings.current_scene = TitleScene()
-    settings.current_floor = 4  # TODO debug bosses
+    # settings.current_floor = 2  # TODO debug bosses
 
     # Main Loop
     while True:
@@ -58,8 +59,16 @@ def main():
 
         # back to map
         if settings.current_scene.done:
-            settings.current_scene = MapScene()
-            settings.current_floor += 1
+            if settings.current_floor == 4:
+                # go to the next session
+                settings.session += 1
+                settings.current_floor = 0
+                settings.base_cr += 1
+                settings.map = []
+                settings.current_scene = MapScene()
+            else:
+                settings.current_scene = MapScene()
+                settings.current_floor += 1
 
         # check for exit
         settings.events = pygame.event.get()
@@ -85,6 +94,11 @@ def main():
                 settings.fast_play = not settings.fast_play
             if keys.get("h"):
                 show_help = not show_help
+            if keys.get("p"):
+                # level up all players
+                for player in settings.players:
+                    player.level_up()
+                settings.party_level += 1
 
         # fill screen black
         settings.screen.fill(settings.BLACK)
